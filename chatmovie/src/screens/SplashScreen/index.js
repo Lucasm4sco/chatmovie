@@ -1,6 +1,9 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ActivityIndicator as Spinner, Animated } from 'react-native';
 import { Container, Logo, TitleLogo, ColorRed } from './styles.js';
+
+import { useDispatch } from 'react-redux'
+import { getDataStorage } from '../../slices/authSlice.js';
 
 import imgMovies from '../../assets/logo/video-player.png';
 
@@ -8,6 +11,7 @@ const SplashScreen = ({fontsLoaded}) => {
     
     const positionAnim = useRef(new Animated.Value(0)).current;
     const [loadingComponent, setLoadingComponent] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setTimeout(() => {
@@ -21,6 +25,10 @@ const SplashScreen = ({fontsLoaded}) => {
             setTimeout(() => setLoadingComponent(true), 300);
         }, 700)
     }, [])
+
+    useEffect(() => {
+        dispatch(getDataStorage())
+    }, []);
 
     if (!fontsLoaded)
         return
