@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { useAuth } from './src/hooks/useAuth';
-import { useChooseWithStatusNetwork } from './src/hooks/useChooseWithStatusNetwork';
+import { useChooseWithNetworkStatus } from './src/hooks/useChooseWithNetworkStatus';
 
 import { Provider } from 'react-redux';
 import store from './src/store';
@@ -24,7 +24,7 @@ const StartingApp = () => {
   });
 
   const { loading } = useAuth();
-  const CurrentComponentAplication = useChooseWithStatusNetwork(App, WithoutConnectionScreen, LoadingScreen, true);
+  const CurrentComponentAplication = useChooseWithNetworkStatus(App, WithoutConnectionScreen, LoadingScreen, true);
 
   useEffect(() => {
     setTimeout(() => setFinishedAnimSplashScreen(true), 3000);

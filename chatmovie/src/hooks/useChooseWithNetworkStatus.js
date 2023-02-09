@@ -1,6 +1,6 @@
 import { useNetInfo } from "@react-native-community/netinfo";
 
-export const useChooseWithStatusNetwork = (ValueConnected, ValueNotConnected, ValueLoading, isComponents = false) => {
+export const useChooseWithNetworkStatus = (ValueConnected, ValueNotConnected, ValueLoading, isComponents = false) => {
     const values = isComponents ? ({
         true: <ValueConnected />,
         false: <ValueNotConnected />,
