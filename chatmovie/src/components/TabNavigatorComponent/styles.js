@@ -18,5 +18,4 @@ export const ButtonNavigator = styled.TouchableHighlight`
     height: 100%;
     align-items: center;
     justify-content: center;
-    // background-color:${props => props.background};
 `

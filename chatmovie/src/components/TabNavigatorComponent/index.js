@@ -37,7 +37,6 @@ const TabNavigatorComponent = ({ state, navigation, auth }) => {
                     <ButtonNavigator
                         accessibilityRole="button"
                         accessibilityState={isFocused ? { selected: true } : {}}
-                        background={isFocused ? '#1b1b1b' : 'black'}
                         onPress={onPress}
                         key={route.name}
                     >

@@ -1,0 +1,23 @@
+import styled from "styled-components/native";
+
+export const HeaderContainer = styled.View`
+    height: 90px;
+    background-color: black;
+    padding-top: ${props => props.paddingTop}px;
+    border-bottom-width: 1px;
+    border-bottom-color: #441a19;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-horizontal: 25px;
+`
+
+export const Text = styled.Text`
+    color: white;
+    font-family: Acme;
+    font-size: 32px;
+`
+
+export const ColorRed = styled.Text`
+    color: #c30f0e;
+`

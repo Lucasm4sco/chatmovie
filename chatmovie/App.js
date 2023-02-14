@@ -17,6 +17,7 @@ import WithoutConnectionScreen from './src/screens/WithoutConnectionScreen';
 import HomeScreen from './src/screens/HomeScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
+import HeaderTabNavigator from './src/components/HeaderTabNavigator';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,10 +27,9 @@ const TabsNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false
+        header: props => <HeaderTabNavigator {...props} />
       }}
       tabBar={props => <TabNavigatorComponent {...props} auth={auth} />}
-      initialRouteName='Add'
     >
       <Tab.Screen name='Home' component={HomeScreen} />
       <Tab.Screen name='Add' component={HomeScreen} />
