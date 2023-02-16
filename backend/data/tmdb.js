@@ -10,7 +10,7 @@ export const getListHome = async () => {
         {
             slug: 'trending',
             title: 'Em Alta',
-            items: await makeRequestTMDB('/trending/all/week')
+            items: await makeRequestTMDB('/trending/movie/week')
         },
         {
             slug: 'action',
@@ -38,4 +38,14 @@ export const getListHome = async () => {
             items: await makeRequestTMDB('/discover/movie', 'with_genres=99')
         }
     ]
+}
+
+export const getDetails = async (type, id) => {
+    const data = await makeRequestTMDB(`/${type}/${id}`);
+    return data;
+}
+
+export const getRecommended = async (type, id) => {
+    const recommended = await makeRequestTMDB(`/${type}/${id}/recommendations`);
+    return recommended;
 }
