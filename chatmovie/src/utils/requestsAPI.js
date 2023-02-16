@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+export const BASE_URL_IMAGE = 'https://image.tmdb.org/t/p';
 const BASE_URL = 'http://192.168.2.199:5000';
 const REQUESTS_ENDPOINTS = {
     users: '/api/users',

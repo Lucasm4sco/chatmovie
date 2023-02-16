@@ -12,7 +12,6 @@ export const useAuth = () => {
         else
             setAuth(false);
 
-
     }, [user]);
 
     return { auth, loading };

@@ -1,8 +1,9 @@
 import { Container, CarouselFeature, TitleFeature, MoviesFeature } from './styles';
 
-const LoadingComponent = () => {
+const LoadingComponent = (props) => {
     return (
         <Container
+            {...props}
             showsVerticalScrollIndicator={false}
             endFillColor='#AAA'   
         >   

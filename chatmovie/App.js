@@ -18,6 +18,7 @@ import HomeScreen from './src/screens/HomeScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
 import HeaderTabNavigator from './src/components/HeaderTabNavigator';
+import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,13 +45,11 @@ const App = () => {
     <NavigationContainer>
       <StatusBar style='light' />
       <Stack.Navigator
-        screenOptions={{
-          headerShown: false
-        }}
+        screenOptions={{ headerShown: false }}
         initialRouteName='Main'
       >
         <Stack.Screen name='Main' component={TabsNavigator} />
-        <Stack.Screen name='NoConnection' component={WithoutConnectionScreen} />
+        <Stack.Screen name='MovieDetails' component={MovieDetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -63,11 +62,7 @@ const StartingApp = () => {
   });
 
   const { loading } = useAuth();
-  const CurrentComponentAplication = useChooseWithNetworkStatus(
-    <App />,
-    <WithoutConnectionScreen />,
-    <LoadingScreen />
-  );
+  const CurrentComponentAplication = useChooseWithNetworkStatus(<App />, <WithoutConnectionScreen />, <LoadingScreen />);
 
   useEffect(() => {
     setTimeout(() => setFinishedAnimSplashScreen(true), 3000);

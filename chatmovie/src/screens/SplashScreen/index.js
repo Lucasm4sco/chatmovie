@@ -28,7 +28,7 @@ const SplashScreen = ({fontsLoaded}) => {
 
     useEffect(() => {
         dispatch(getDataStorage())
-    }, []);
+    }, [dispatch]);
 
     if (!fontsLoaded)
         return

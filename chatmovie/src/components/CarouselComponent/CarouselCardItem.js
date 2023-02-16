@@ -1,15 +1,31 @@
-import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
 import { CarouselImage, CarouselTitle } from './styles';
+import { BASE_URL_IMAGE } from '../../utils/requestsAPI';
+
+const ButtonNavigate = ({ children, id }) => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      activeOpacity={0.6}
+      onPress={() => navigation.navigate('MovieDetails', { id })}
+      key={id}
+    >
+      {children}
+    </TouchableOpacity>
+  )
+}
 
 const CarouselCardItem = ({ item, index }) => {
-  const urlImage = item.backdrop_path || item.poster_path;
+  const endpointImage = item.backdrop_path || item.poster_path;
+
   return (
-    <View key={index}>
+    <ButtonNavigate key={index} id={item.id}>
       <CarouselImage
-        source={{ uri: `https://image.tmdb.org/t/p/w500${urlImage}` }}
+        source={{ uri: `${BASE_URL_IMAGE}/w500${endpointImage}` }}
       />
       <CarouselTitle numberOfLines={1}>{item.title || item.name}</CarouselTitle>
-    </View>
+    </ButtonNavigate>
   )
 }
 
