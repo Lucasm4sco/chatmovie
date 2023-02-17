@@ -12,13 +12,12 @@ import { Provider } from 'react-redux';
 import store from './src/store';
 
 import SplashScreen from './src/screens/SplashScreen';
-import LoadingScreen from './src/screens/LoadingScreen';
 import WithoutConnectionScreen from './src/screens/WithoutConnectionScreen';
 import HomeScreen from './src/screens/HomeScreen';
+import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
 import HeaderTabNavigator from './src/components/HeaderTabNavigator';
-import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,6 +49,7 @@ const App = () => {
       >
         <Stack.Screen name='Main' component={TabsNavigator} />
         <Stack.Screen name='MovieDetails' component={MovieDetailsScreen} />
+        <Stack.Screen name='Search' component={SearchMoviesScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -62,7 +62,7 @@ const StartingApp = () => {
   });
 
   const { loading } = useAuth();
-  const CurrentComponentAplication = useChooseWithNetworkStatus(<App />, <WithoutConnectionScreen />, <LoadingScreen />);
+  const CurrentComponentAplication = useChooseWithNetworkStatus(<App />, <WithoutConnectionScreen />);
 
   useEffect(() => {
     setTimeout(() => setFinishedAnimSplashScreen(true), 3000);
