@@ -59,7 +59,6 @@ const MovieDetailsScreen = ({ navigation, route }) => {
                 <ContainerButtons>
                     <ButtonGoBack
                         activeOpacity={0.6}
-                        underlayColor='rgba(0, 0, 0, 0.5)'
                         onPress={() => navigation.goBack()}
                     >
                         <AntDesign name="arrowleft" size={28} color="white" />

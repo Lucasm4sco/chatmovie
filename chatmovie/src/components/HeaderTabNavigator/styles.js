@@ -21,3 +21,11 @@ export const Text = styled.Text`
 export const ColorRed = styled.Text`
     color: #c30f0e;
 `
+
+export const ButtonSearch = styled.TouchableOpacity`
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+`

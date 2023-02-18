@@ -4,10 +4,14 @@ import movieService from "../services/movieService";
 const initialState = {
     loading: false,
     loadingDetails: false,
-    errors: false,
     movies: [],
     movieDetails: null,
-    recommendedMovies: {}
+    recommendedMovies: {},
+    search: {
+        loading: false,
+        movies: {},
+        query: ''
+    }
 }
 
 export const getHomeList = createAsyncThunk(
@@ -34,59 +38,61 @@ export const getRecommendedMovies = createAsyncThunk(
     }
 )
 
+export const getSearchMovies = createAsyncThunk(
+    'get/searchmovies',
+    async (query) => {
+        const foundMovies = await movieService.getSearchMovies(query);
+        return foundMovies;
+    }
+)
+
 export const movieSlice = createSlice({
     name: 'movies',
     initialState,
     reducers: {
         reset: (state) => {
             state.loadingDetails = false;
-            state.errors = false;
             state.movieDetails = null;
-            state.recommendedMovies = {};
+            state.recommendedMovies = {};  
+        },
+        setQuerySearch: (state, { payload }) => {
+            state.search.query = payload;
+        },
+        resetSearch: (state) => {
+            state.search.movies = {};
+            state.search.loading = false;
+            state.search.query = '';
         }
     },
     extraReducers: (builder) => {
         builder
             .addCase(getHomeList.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                state.errors = false;
                 state.movies = payload
             })
             .addCase(getHomeList.pending, (state) => {
                 state.loading = true;
-                state.errors = false;
             })
-            // .addCase(getHomeList.rejected, (state, { payload }) => {
-            //     state.loading = false;
-            //     state.errors = payload;
-            //     state.movies = [];
-            // })
             .addCase(getMovieDetails.fulfilled, (state, { payload }) => {
                 state.loadingDetails = false;
-                state.errors = false;
                 state.movieDetails = payload;
             })
             .addCase(getMovieDetails.pending, (state) => {
                 state.loadingDetails = true;
-                state.errors = false;
             })
-            // .addCase(getMovieDetails.rejected, (state, { payload }) => {
-            //     state.loadingDetails = false;
-            //     state.errors = payload;
-            //     state.movieDetails = null;
-            // })
             .addCase(getRecommendedMovies.fulfilled, (state, { payload }) => {
                 state.recommendedMovies = payload;
-                state.loading = false;
-                state.errors = false;
             })
-            // .addCase(getRecommendedMovies.rejected, (state, { payload }) => {
-            //     state.loadingDetails = false;
-            //     state.errors = payload;
-            //     state.recommendedMovies = {};
-            // })
+            .addCase(getSearchMovies.fulfilled, (state, { payload }) => {
+                state.search.loading = false;
+                state.search.movies = payload;
+            })
+            .addCase(getSearchMovies.pending, (state) => {
+                state.search.loading = true;
+                state.search.movies = {};
+            })
     }
 })
 
-export const { reset } = movieSlice.actions;
+export const { reset, setQuerySearch, resetSearch } = movieSlice.actions;
 export default movieSlice.reducer;

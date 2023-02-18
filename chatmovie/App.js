@@ -15,6 +15,7 @@ import SplashScreen from './src/screens/SplashScreen';
 import WithoutConnectionScreen from './src/screens/WithoutConnectionScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
+import SearchMoviesScreen from './src/screens/SearchMoviesScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
 import HeaderTabNavigator from './src/components/HeaderTabNavigator';

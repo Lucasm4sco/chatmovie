@@ -15,10 +15,16 @@ const getRecommendedMovies = async (id) => {
     return recommendedMovies;
 }
 
+const getSearchMovies = async(query) => {
+    const foundMovies = await Requests.makeGET('movies', '/search?query='+query);
+    return foundMovies;
+}
+
 const movieService = {
     getHomeList,
     getMovieDetails,
-    getRecommendedMovies
+    getRecommendedMovies,
+    getSearchMovies
 }
 
 export default movieService;
