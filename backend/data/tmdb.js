@@ -49,3 +49,8 @@ export const getRecommended = async (type, id) => {
     const recommended = await makeRequestTMDB(`/${type}/${id}/recommendations`);
     return recommended;
 }
+
+export const getSearch = async (type, query) => {
+    const dataSearch = await makeRequestTMDB(`/search/${type}`, 'query=' + query);
+    return dataSearch;
+}

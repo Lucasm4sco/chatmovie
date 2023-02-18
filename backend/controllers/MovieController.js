@@ -1,4 +1,4 @@
-import { getListHome, getDetails, getRecommended } from "../data/tmdb.js";
+import { getListHome, getDetails, getRecommended, getSearch } from "../data/tmdb.js";
 
 const getMoviesHome = async (req, res) => {
     try {
@@ -42,11 +42,26 @@ const getRecommendedMovies = async (req, res) => {
     }
 }
 
+const getSearchMovie = async (req, res) => {
+    try {
+        const { query } = req.query;
+
+        if(!query)
+            return res.status(400).json({ errors: ['Solicitação inválida.'] });
+
+        const dataSeach = await getSearch('movie', query);
+        return res.status(200).json(dataSeach);
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ errors: ['Não foi possível completar a requisição'] });
+    }
+}
 
 const MovieController = {
     getMoviesHome,
     getDetailsMovie,
-    getRecommendedMovies
+    getRecommendedMovies,
+    getSearchMovie
 }
 
 export default MovieController;
