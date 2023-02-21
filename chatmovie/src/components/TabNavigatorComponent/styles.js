@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 export const NavContainer = styled.View`
     position: absolute;
-    bottom: 5%;
+    bottom: 40px;
     left: ${props => props.halfScreen}px;
     width: ${props => props.width}px;
     height: 60px;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
+import { useWindowDimensions, View } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useAuth } from './src/hooks/useAuth';
 import { useChooseWithNetworkStatus } from './src/hooks/useChooseWithNetworkStatus';
@@ -19,31 +19,55 @@ import SearchMoviesScreen from './src/screens/SearchMoviesScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
 import HeaderTabNavigator from './src/components/HeaderTabNavigator';
+import AuthenticateUser from './src/components/AuthenticateUser';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const RenderNavigator = ({ children }) => (
+  <Tab.Navigator
+    screenOptions={{
+      header: props => <HeaderTabNavigator {...props} />
+    }}
+    tabBar={props => <TabNavigatorComponent {...props} auth={auth} />}
+  >
+    {children}
+  </Tab.Navigator>
+)
+
 const TabsNavigator = () => {
   const { auth } = useAuth();
+  const { height } = useWindowDimensions();
+
+  if (auth)
+    return (
+      <RenderNavigator>
+        <Tab.Screen name='Home' component={HomeScreen} />
+        <Tab.Screen name='Add' component={HomeScreen} />
+        <Tab.Screen name='Authenticate' component={AuthenticateUser} initialParams={auth} />
+        <Tab.Screen name='Messages' component={HomeScreen} />
+      </RenderNavigator>
+    )
+
   return (
-    <Tab.Navigator
-      screenOptions={{
-        header: props => <HeaderTabNavigator {...props} />
-      }}
-      tabBar={props => <TabNavigatorComponent {...props} auth={auth} />}
-    >
-      <Tab.Screen name='Home' component={HomeScreen} />
-      <Tab.Screen name='Add' component={HomeScreen} />
-      <Tab.Screen name='Perfil' component={HomeScreen} />
-      <Tab.Screen name='Messages' component={HomeScreen} />
-    </Tab.Navigator>
+    <View style={{ height }}>
+      <Tab.Navigator
+        screenOptions={{
+          header: props => <HeaderTabNavigator {...props} />
+        }}
+        tabBar={props => <TabNavigatorComponent {...props} auth={auth} />}
+      >
+        <Tab.Screen name='Home' component={HomeScreen} />
+        <Tab.Screen name='Authenticate' component={AuthenticateUser} initialParams={auth} />
+      </Tab.Navigator>
+    </View>
   )
 }
 
 const App = () => {
   return (
     <NavigationContainer>
-      <StatusBar style='light' />
+
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
         initialRouteName='Main'
