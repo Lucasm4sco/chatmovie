@@ -15,8 +15,17 @@ const makeGET = async (type, endpoint = '') => {
     return data;
 }
 
+const makePOST = async (type, endpoint = '', data, config = {}) => {
+    const response = await axios.post(BASE_URL + REQUESTS_ENDPOINTS[type] + endpoint, data, config)
+        .then(response => response.data)
+        .catch(err => err.response.data);
+
+    return response
+}
+
 const Requests = {
-    makeGET
+    makeGET,
+    makePOST
 }
 
 export default Requests;

@@ -65,6 +65,8 @@ const SearchMoviesScreen = ({ navigation }) => {
                             cursorColor='red'
                             selectionColor='#441a19'
                             inputMode='search'
+                            placeholder='Pesquisar por filmes...'
+                            placeholderTextColor='#aaa'
                             autoFocus
                         />
                         <ButtonSearch

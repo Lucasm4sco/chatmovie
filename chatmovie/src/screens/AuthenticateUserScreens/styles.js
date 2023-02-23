@@ -7,6 +7,21 @@ export const Container = styled.ScrollView`
     max-width: 400px;
 `
 
+export const ContainerError = styled.View`
+    width: 90%;
+    min-height: 40px;
+    margin-bottom: 10px;
+    background-color: #c30000;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 5px;
+`
+
+export const ErrorMessage = styled.Text`
+    text-align: center;
+    color: white
+`
+
 export const Label = styled.Text`
     width: 90%;
     color: white;
@@ -27,9 +42,9 @@ export const Input = styled.TextInput`
 
 export const Button = styled.TouchableOpacity`
     width: 90%;
+    height: 50px;
     justify-content: center;
     align-items: center;
-    padding: 12px;
     border-radius: 100px;
     background-color: red;
     margin: 20px 0;
