@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { generateToken } from "../utils/crypto.js";
+import { generateToken } from "../utils/token.js";
 import User from "../models/UserModel.js";
 
 const turnIntoHash = (data) => {
