@@ -24,30 +24,8 @@ import AuthenticateUser from './src/components/AuthenticateUser';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const RenderNavigator = ({ children }) => (
-  <Tab.Navigator
-    screenOptions={{
-      header: props => <HeaderTabNavigator {...props} />
-    }}
-    tabBar={props => <TabNavigatorComponent {...props} auth={auth} />}
-  >
-    {children}
-  </Tab.Navigator>
-)
-
-const TabsNavigator = () => {
-  const { auth } = useAuth();
+const RenderNavigator = ({ children, auth }) => {
   const { height } = useWindowDimensions();
-
-  if (auth)
-    return (
-      <RenderNavigator>
-        <Tab.Screen name='Home' component={HomeScreen} />
-        <Tab.Screen name='Add' component={HomeScreen} />
-        <Tab.Screen name='Authenticate' component={AuthenticateUser} initialParams={auth} />
-        <Tab.Screen name='Messages' component={HomeScreen} />
-      </RenderNavigator>
-    )
 
   return (
     <View style={{ height }}>
@@ -57,10 +35,34 @@ const TabsNavigator = () => {
         }}
         tabBar={props => <TabNavigatorComponent {...props} auth={auth} />}
       >
-        <Tab.Screen name='Home' component={HomeScreen} />
-        <Tab.Screen name='Authenticate' component={AuthenticateUser} initialParams={auth} />
+        {children}
       </Tab.Navigator>
     </View>
+  )
+}
+
+
+const TabsNavigator = () => {
+  const { auth } = useAuth();
+  const { height } = useWindowDimensions();
+
+  if (auth)
+    return (
+      <View style={{ height }}>
+        <RenderNavigator auth={auth}>
+          <Tab.Screen name='Home' component={HomeScreen} />
+          <Tab.Screen name='Add' component={HomeScreen} />
+          <Tab.Screen name='Authenticate' component={AuthenticateUser} initialParams={{ auth }} />
+          <Tab.Screen name='Messages' component={HomeScreen} />
+        </RenderNavigator>
+      </View>
+    )
+
+  return (
+    <RenderNavigator>
+      <Tab.Screen name='Home' component={HomeScreen} />
+      <Tab.Screen name='Authenticate' component={AuthenticateUser} initialParams={{ auth }} />
+    </RenderNavigator>
   )
 }
 

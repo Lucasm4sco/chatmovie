@@ -7,7 +7,9 @@ import Register from "../../screens/AuthenticateUserScreens/Register";
 
 const Tab = createMaterialTopTabNavigator();
 
-const AuthenticateUser = ({ auth }) => {
+const AuthenticateUser = ({ route }) => {
+    const auth = route.params?.auth
+    
     if (auth)
         return <PerfilScreen />
 
