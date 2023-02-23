@@ -12,5 +12,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(router);
 
+app.use('/perfil', express.static('uploads/perfil'))
+app.use('/capa', express.static('uploads/capa'))
+
 connectionDB();
 
