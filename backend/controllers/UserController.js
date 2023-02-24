@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/token.js";
 import User from "../models/UserModel.js";
+import Uuid from "../models/UuidModel.js";
 
 const turnIntoHash = (data) => {
     const salt = bcrypt.genSaltSync();
@@ -35,6 +36,8 @@ const Register = async (req, res) => {
             profile_picture: '',
             cover_image: ''
         });
+
+        await Uuid.create({ _id_user: newUser._id })
 
         const userData = {
             _id: newUser._id,
@@ -88,9 +91,23 @@ const Login = async (req, res) => {
     }
 }
 
+const CurrentProfile = async (req, res) => {
+    const user = req.user;
+    const userData = {
+        _id: user._id,
+        email: user.email,
+        user_name: user.user_name,
+        name: user.name,
+        profile_picture: user.profile_picture,
+        cover_image: user.cover_image
+    }
+    return res.status(200).json(userData);
+}
+
 const UserController = {
     Register,
-    Login
+    Login,
+    CurrentProfile
 };
 
 export default UserController;
