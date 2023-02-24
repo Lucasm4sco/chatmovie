@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Keychain from 'react-native-keychain';
+import * as SecureStore from 'expo-secure-store';
 
 export const getData = async (key) => {
     try {
@@ -21,7 +21,7 @@ export const storeData = async (key, data) => {
 
 export const storeToken = async (token) => {
     try {
-        await Keychain.setGenericPassword(token, 'token');
+        await SecureStore.setItemAsync('token', token);
     } catch (e) {
         console.log(e.message);
     }
@@ -29,10 +29,22 @@ export const storeToken = async (token) => {
 
 export const getToken = async () => {
     try {
-        const credentials = await Keychain.getGenericPassword();
-        return credentials ? credentials.token : null;
+        const token = await SecureStore.getItemAsync('token');
+        return token;
     } catch (e) {
         console.log(e.message);
         return null;
+    }
+}
+
+export const removeDataStorage = async () => {
+    try {
+        const user = await AsyncStorage.getItem('user');
+        if (user !== null)
+            await AsyncStorage.removeItem('user');
+
+        await SecureStore.deleteItemAsync('token');
+    } catch (e) {
+        console.log(e.message);
     }
 }
