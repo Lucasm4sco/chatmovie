@@ -10,7 +10,8 @@ const authGuard = async (req, res, next) => {
             return res.status(401).json({ errors: ['Acesso negado!'] });
 
         const userId = verifyToken(token).data._id;
-        req.user = await User.findById(userId).select('-password');
+        req.user = await User.findById(userId)
+            .select('email user_name name profile_picture cover_image bio');
         next();
     } catch (error) {
         return res.status(401).json({ errors: ['Token inválido.'] });
