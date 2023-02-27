@@ -1,9 +1,8 @@
 import styled from "styled-components/native";
 
 export const HeaderContainer = styled.View`
-    height: 90px;
+    height: 60px;
     background-color: black;
-    padding-top: ${props => props.paddingTop}px;
     border-bottom-width: 1px;
     border-bottom-color: #441a19;
     flex-direction: row;

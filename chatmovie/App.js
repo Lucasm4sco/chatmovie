@@ -31,7 +31,7 @@ const RenderNavigator = ({ children, auth }) => {
     <View style={{ height }}>
       <Tab.Navigator
         screenOptions={{
-          header: props => <HeaderTabNavigator {...props} />
+          header: props => <HeaderTabNavigator {...props} auth={auth} />
         }}
         tabBar={props => <TabNavigatorComponent {...props} auth={auth} />}
       >
@@ -44,24 +44,21 @@ const RenderNavigator = ({ children, auth }) => {
 
 const TabsNavigator = () => {
   const { auth } = useAuth();
-  const { height } = useWindowDimensions();
 
   if (auth)
     return (
-      <View style={{ height }}>
-        <RenderNavigator auth={auth}>
-          <Tab.Screen name='Home' component={HomeScreen} />
-          <Tab.Screen name='Add' component={HomeScreen} />
-          <Tab.Screen name='Authenticate' component={AuthenticateUser} initialParams={{ auth }} />
-          <Tab.Screen name='Messages' component={HomeScreen} />
-        </RenderNavigator>
-      </View>
+      <RenderNavigator auth={auth}>
+        <Tab.Screen name='Home' component={HomeScreen} />
+        <Tab.Screen name='Add' component={HomeScreen} />
+        <Tab.Screen name='Authenticate' component={AuthenticateUser} />
+        <Tab.Screen name='Messages' component={HomeScreen} />
+      </RenderNavigator>
     )
 
   return (
     <RenderNavigator>
       <Tab.Screen name='Home' component={HomeScreen} />
-      <Tab.Screen name='Authenticate' component={AuthenticateUser} initialParams={{ auth }} />
+      <Tab.Screen name='Authenticate' component={AuthenticateUser} />
     </RenderNavigator>
   )
 }
@@ -69,7 +66,6 @@ const TabsNavigator = () => {
 const App = () => {
   return (
     <NavigationContainer>
-
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
         initialRouteName='Main'

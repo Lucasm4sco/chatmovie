@@ -1,5 +1,6 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { ScrollView, StyleSheet } from "react-native";
+import { useAuth } from '../../hooks/useAuth.js';
 
 import PerfilScreen from "../../screens/PerfilScreen";
 import Login from "../../screens/AuthenticateUserScreens/Login";
@@ -7,9 +8,9 @@ import Register from "../../screens/AuthenticateUserScreens/Register";
 
 const Tab = createMaterialTopTabNavigator();
 
-const AuthenticateUser = ({ route }) => {
-    const auth = route.params?.auth
-    
+const AuthenticateUser = () => {
+    const { auth } = useAuth();
+
     if (auth)
         return <PerfilScreen />
 

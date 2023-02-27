@@ -54,7 +54,8 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         reset: (state) => {
-            state = initialState;
+            for(const key in state) 
+                state[key] = initialState[key]
         }
     },
     extraReducers: (builder) => {
