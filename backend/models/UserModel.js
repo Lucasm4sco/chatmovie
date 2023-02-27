@@ -6,8 +6,18 @@ const UserModel = new Schema(
         user_name: String,
         email: String,
         password: String,
-        profile_picture: String,
-        cover_image: String,
+        bio: {
+            type: String,
+            default: ''
+        },
+        profile_picture: {
+            type: String,
+            default: ''
+        },
+        cover_image: {
+            type: String,
+            default: ''
+        },
         friends: Array,
         friend_requests: Array,
         friend_requests_sent: Array,
