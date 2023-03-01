@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/token.js";
+import { makeRequestTMDB } from "../utils/request.js";
+import { Types } from "mongoose";
 import User from "../models/UserModel.js";
 import Uuid from "../models/UuidModel.js";
-import { Types } from "mongoose";
 
 const turnIntoHash = data => bcrypt.hashSync(data, bcrypt.genSaltSync())
 
@@ -134,22 +135,69 @@ const getUserById = async (req, res) => {
 }
 
 const getFavoriteMovies = async (req, res) => {
-    const { id } = req.params;
-    const page = Number(req.query.page || 1);
-    const isInvalidPage = isNaN(page);
-    const isInvalidId = !isValidObjectId(id);
+    try {
+        const { id } = req.params;
+        const page = Number(req.query.page || 1);
+        const isInvalidPage = isNaN(page);
+        const isInvalidId = !isValidObjectId(id);
 
-    if (isInvalidId || isInvalidPage)
-        return res.status(400).json({ errors: ['Não foi possível completar a requisição.'] });
+        if (isInvalidId || isInvalidPage)
+            return res.status(400).json({ errors: ['Não foi possível completar a requisição.'] });
 
-    const { favorite_movies } = await User.findById(id).select('favorite_movies');
+        const { favorite_movies } = await User.findById(id).select('favorite_movies');
 
-    if (!favorite_movies)
-        return res.status(400).json({ errors: ['Não foi possível completar a requisição.'] });
+        if (!favorite_movies)
+            return res.status(400).json({ errors: ['Não foi possível completar a requisição.'] });
 
-    const indicePage = (page === 1 ? 0 : (page - 1) * 10);
-    const movies = favorite_movies.slice(indicePage, indicePage + 10);
-    return res.status(200).json({ movies, page });
+        const indicePage = (page === 1 ? 0 : (page - 1) * 10);
+        const movies = favorite_movies.slice(indicePage, indicePage + 10);
+        return res.status(200).json({ movies, page });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ errors: ['Ocorreu um erro inesperado no servidor, tente novamente mais tarde!'] });
+    }
+}
+
+const updateFavoriteMovies = async (req, res) => {
+    try {
+        const { id_movie, action } = req.body;
+
+        if (action === 'add') {
+            const dataMovie = await makeRequestTMDB('/movie/' + id_movie);
+            const isInvalidId = !id_movie || (dataMovie?.id !== id_movie);
+
+            if (isInvalidId)
+                return res.status(422).json({ errors: ['ID do filme inválido.'] });
+
+            const user = await User.findById(req.user._id);
+
+            if (user.favorite_movies.includes(id_movie))
+                return res.status(422).json({ errors: ['Filme já adicionado aos favoritos.'] });
+
+            user.favorite_movies.push(id_movie);
+            await user.save();
+            return res.status(200).json({ favorite_movies: user.favorite_movies });
+        }
+
+        if (action === 'delete') {
+            const favorite_movies = req.user.favorite_movies;
+
+            if (!favorite_movies.includes(id_movie))
+                return res.status(404).json({ errors: ['O ID do filme não foi encontrado na lista de favoritos.'] });
+
+            const updatedUser = await User.findByIdAndUpdate(
+                req.user._id,
+                { $pull: { favorite_movies: id_movie } },
+                { new: true }
+            );
+            return res.status(200).json({ favorite_movies: updatedUser.favorite_movies });
+        }
+
+        return res.status(422).json({ errors: ['A ação não foi definida corretamente'] });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ errors: ['Ocorreu um erro inesperado no servidor, tente novamente mais tarde!'] });
+    }
 }
 
 const UserController = {
@@ -159,7 +207,8 @@ const UserController = {
     getUserFriends,
     getUsers,
     getUserById,
-    getFavoriteMovies
+    getFavoriteMovies,
+    updateFavoriteMovies
 };
 
 export default UserController;

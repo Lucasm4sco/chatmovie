@@ -15,4 +15,6 @@ userRoutes.get('/:id/movies', authGuard, UserController.getFavoriteMovies);
 userRoutes.post('/register', createUserValidation(), handleValidations, UserController.Register);
 userRoutes.post('/login', loginValidations(), handleValidations, UserController.Login);
 
+userRoutes.patch('/movies', authGuard, UserController.updateFavoriteMovies);
+
 export default userRoutes;
