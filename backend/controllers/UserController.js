@@ -200,6 +200,101 @@ const updateFavoriteMovies = async (req, res) => {
     }
 }
 
+const sendFriendRequest = async (req, res) => {
+    try {
+        const user_id = req.user._id;
+        const { id_recipient_user } = req.body;
+        const isInvalidId = !isValidObjectId(id_recipient_user) || id_recipient_user === user_id.toString();
+
+        if (isInvalidId)
+            return res.status(400).json({ errors: ['Não foi possível completar a requisição.'] });
+
+        const recipientUser = await User.findById(id_recipient_user);
+
+        if (!recipientUser)
+            return res.status(422).json({ errors: ['Usuário não foi encontrado.'] });
+
+        const requestAlreadySent = recipientUser.friends.includes(user_id) || recipientUser.friend_requests.includes(user_id) || recipientUser.friend_requests_sent.includes(user_id);
+
+        if (requestAlreadySent)
+            return res.status(422).json({ errors: ['Não é possível realizar a solicitação duas vezes.'] });
+
+        const user = await User.findById(user_id);
+        user.friend_requests_sent.push(recipientUser._id);
+        recipientUser.friend_requests.push(user._id);
+        await user.save();
+        await recipientUser.save();
+
+        return res.status(200).json({
+            friends: user.friends,
+            friend_requests: user.friend_requests,
+            friend_requests_sent: user.friend_requests_sent
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ errors: ['Ocorreu um erro inesperado no servidor, tente novamente mais tarde!'] });
+    }
+}
+
+const acceptFriendRequest = async (req, res) => {
+    try {
+        const friend_requests = req.user.friend_requests;
+        const { id_user_request } = req.body;
+
+        if(!friend_requests.includes(id_user_request))
+            return res.status(400).json({errors: ['ID enviado não corresponde com as solicitações de amizade.']});
+
+        const user = await User.findById(req.user._id);
+        const userWithRequest = await User.findById(id_user_request);
+        // removes user id received from friend requests and add to friends array
+        user.friend_requests = friend_requests.filter(id => id.toString() !== userWithRequest._id.toString());
+        user.friends.push(userWithRequest._id);
+        // removes the current user id from the sent friend requests array and adds it to the friends array
+        userWithRequest.friend_requests_sent = userWithRequest.friend_requests_sent.filter(id => id.toString() !== user._id.toString())
+        userWithRequest.friends.push(user._id);
+        // salve the changes
+        await user.save()
+        await userWithRequest.save();
+
+        return res.status(200).json({
+            friends: user.friends,
+            friend_requests: user.friend_requests,
+            friend_requests_sent: user.friend_requests_sent
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ errors: ['Ocorreu um erro inesperado no servidor, tente novamente mais tarde!'] });
+    }
+}
+
+const rejectFriendRequest = async (req, res) => {
+    try {
+        const friend_requests = req.user.friend_requests;
+        const { id_user_request } = req.body;
+
+        if(!friend_requests.includes(id_user_request))
+            return res.status(400).json({errors: ['ID enviado não corresponde com as solicitações de amizade.']});
+
+        const user = await User.findById(req.user._id);
+        const userWithRequest = await User.findById(id_user_request);
+        // removes user id received from friend requests array
+        user.friend_requests = friend_requests.filter(id => id.toString() !== userWithRequest._id.toString());
+        userWithRequest.friend_requests_sent = userWithRequest.friend_requests_sent.filter(id => id.toString() !== user._id.toString());
+        // save the changes
+        await user.save();
+        await userWithRequest.save();
+
+        return res.status(200).json({
+            friends: user.friends,
+            friend_requests: user.friend_requests,
+            friend_requests_sent: user.friend_requests_sent
+        });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ errors: ['Ocorreu um erro inesperado no servidor, tente novamente mais tarde!'] });
+    }
+}
+
 const UserController = {
     Register,
     Login,
@@ -208,7 +303,10 @@ const UserController = {
     getUsers,
     getUserById,
     getFavoriteMovies,
-    updateFavoriteMovies
+    updateFavoriteMovies,
+    sendFriendRequest,
+    acceptFriendRequest,
+    rejectFriendRequest
 };
 
 export default UserController;
