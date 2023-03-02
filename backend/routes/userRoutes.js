@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { createUserValidation, loginValidations } from "../middlewares/UserValidations.js";
+import { createUserValidation, loginValidations, updateUserValidations } from "../middlewares/UserValidations.js";
 import UserController from "../controllers/UserController.js";
 import handleValidations from "../middlewares/handleValidations.js";
+import imageUploadValidation from "../middlewares/imageUpload.js";
 import authGuard from "../middlewares/authGuard.js";
 
 const userRoutes = Router();
@@ -17,6 +18,8 @@ userRoutes.post('/login', loginValidations(), handleValidations, UserController.
 userRoutes.post('/friends', authGuard, UserController.sendFriendRequest);
 userRoutes.post('/friends/accept', authGuard, UserController.acceptFriendRequest);
 userRoutes.post('/friends/reject', authGuard, UserController.rejectFriendRequest);
+
+userRoutes.put('/profile', authGuard, imageUploadValidation, UserController.updateUserProfile);
 
 userRoutes.patch('/movies', authGuard, UserController.updateFavoriteMovies);
 

@@ -96,6 +96,38 @@ const getCurrentProfile = async (req, res) => {
     return res.status(200).json(user);
 }
 
+const updateUserProfile = async (req, res) => {
+    try {
+        const profile_picture = req.files?.profile_picture[0].filename;
+        const cover_image = req.files?.cover_image[0].filename;
+        const { name, bio, user_name } = req.body;
+
+        const user = await User.findById(req.user._id)
+            .select('email user_name name profile_picture cover_image bio');
+
+        if (profile_picture)
+            user.profile_picture = profile_picture;
+
+        if (cover_image)
+            user.cover_image = cover_image;
+
+        if (name !== user.name)
+            user.name = name;
+
+        if (bio !== undefined && bio !== user.bio)
+            user.bio = bio;
+
+        if (user_name !== user.user_name)
+            user.user_name = user_name;
+
+        await user.save();
+        return res.status(200).json(user);
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ errors: ['Ocorreu um erro inesperado no servidor, tente novamente mais tarde!'] });
+    }
+}
+
 const getUserFriends = async (req, res) => {
     const user = req.user;
     const friends = {
@@ -241,8 +273,8 @@ const acceptFriendRequest = async (req, res) => {
         const friend_requests = req.user.friend_requests;
         const { id_user_request } = req.body;
 
-        if(!friend_requests.includes(id_user_request))
-            return res.status(400).json({errors: ['ID enviado não corresponde com as solicitações de amizade.']});
+        if (!friend_requests.includes(id_user_request))
+            return res.status(400).json({ errors: ['ID enviado não corresponde com as solicitações de amizade.'] });
 
         const user = await User.findById(req.user._id);
         const userWithRequest = await User.findById(id_user_request);
@@ -272,8 +304,8 @@ const rejectFriendRequest = async (req, res) => {
         const friend_requests = req.user.friend_requests;
         const { id_user_request } = req.body;
 
-        if(!friend_requests.includes(id_user_request))
-            return res.status(400).json({errors: ['ID enviado não corresponde com as solicitações de amizade.']});
+        if (!friend_requests.includes(id_user_request))
+            return res.status(400).json({ errors: ['ID enviado não corresponde com as solicitações de amizade.'] });
 
         const user = await User.findById(req.user._id);
         const userWithRequest = await User.findById(id_user_request);
@@ -299,6 +331,7 @@ const UserController = {
     Register,
     Login,
     getCurrentProfile,
+    updateUserProfile,
     getUserFriends,
     getUsers,
     getUserById,

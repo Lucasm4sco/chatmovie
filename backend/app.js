@@ -9,7 +9,7 @@ const PORT = 5000;
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);
 
 app.use('/perfil', express.static('uploads/perfil'))

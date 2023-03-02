@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import User from '../models/UserModel.js';
 
 export const createUserValidation = () => {
     return [
@@ -49,5 +50,34 @@ export const loginValidations = () => {
             .withMessage('Defina uma senha válida!')
             .isLength({ min: 6 })
             .withMessage('A senha precisa ter no mínimo 6 caracteres. aaaaaaaaaaaaaaaaaaaaa')
+    ]
+}
+
+export const updateUserValidations = () => {
+    return [
+        body('name')
+            .isString()
+            .withMessage('Defina um nome válido!')
+            .trim()
+            .isLength({ min: 5 })
+            .withMessage('Defina um nome válido!'),
+        body('user_name')
+            .isString()
+            .withMessage('Defina um username válido!')
+            .trim()
+            .isLength({ min: 5, max: 25 })
+            .withMessage('O username definido precisa ter entre 5 e 25 caracteres.')
+            .custom(async (value, { req }) => {
+                const currentIdUser = req.user._id.toString();
+                const user = await User.findOne({ user_name: value }, '_id').exec();
+
+                if (user && user._id.toString() !== currentIdUser)
+                    throw new Error('Username definido já está em uso!');
+
+                return true
+            }),
+        body('bio')
+            .isString()
+            .withMessage('Defina uma bio válida')
     ]
 }
