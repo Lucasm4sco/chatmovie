@@ -8,11 +8,11 @@ import Register from "../../screens/AuthenticateUserScreens/Register";
 
 const Tab = createMaterialTopTabNavigator();
 
-const AuthenticateUser = () => {
+const AuthenticateUser = ({ navigation }) => {
     const { auth } = useAuth();
 
     if (auth)
-        return <PerfilScreen />
+        return <PerfilScreen navigation={navigation} />
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

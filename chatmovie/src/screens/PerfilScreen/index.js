@@ -9,7 +9,7 @@ import iconeUser from '../../assets/icons/user.png';
 import ListMovieRow from "../../components/ListMovieRow";
 import LoadingComponent from '../../components/LoadingComponent';
 
-const PerfilScreen = () => {
+const PerfilScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const { user, loading, favorite_movies } = useSelector(state => state.user);
     const [coverImage, setCoverImage] = useState('');
@@ -23,10 +23,6 @@ const PerfilScreen = () => {
         if (!user || !Object.keys(user).length)
             return
 
-        setCoverImage(Requests.getURLImage('capa', 'testando.png'));
-        setProfilePicture({
-            uri: Requests.getURLImage('perfil', 'testando.png')
-        });
         if (user.cover_image)
             setCoverImage(Requests.getURLImage('capa', user.cover_image));
 
@@ -65,6 +61,7 @@ const PerfilScreen = () => {
                 <ContainerRow>
                     <Button
                         bgColor='#252525'
+                        onPress={() => navigation.navigate('EditProfile', { user })}
                     >
                         <MaterialCommunityIcons name="account-edit-outline" size={24} color="white" />
                         <TextButton>Editar</TextButton>

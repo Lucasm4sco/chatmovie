@@ -33,7 +33,7 @@ const ListMovieRow = ({ items, title, isPoster }) => {
                 horizontal
                 data={items}
                 renderItem={renderItem}
-                keyExtractor={item => (item.name || item.title) + Math.random()}
+                keyExtractor={item => (item.name || item.title) + Math.random().toString()}
             />
         </ListMovieSection>
     )

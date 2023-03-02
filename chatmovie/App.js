@@ -16,6 +16,7 @@ import WithoutConnectionScreen from './src/screens/WithoutConnectionScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
 import SearchMoviesScreen from './src/screens/SearchMoviesScreen';
+import EditProfileScreen from './src/screens/PerfilScreen/EditPerfilScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
 import HeaderTabNavigator from './src/components/HeaderTabNavigator';
@@ -73,6 +74,7 @@ const App = () => {
         <Stack.Screen name='Main' component={TabsNavigator} />
         <Stack.Screen name='MovieDetails' component={MovieDetailsScreen} />
         <Stack.Screen name='Search' component={SearchMoviesScreen} />
+        <Stack.Screen name='EditProfile' component={EditProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

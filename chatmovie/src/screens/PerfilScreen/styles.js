@@ -5,9 +5,9 @@ export const Container = styled.ScrollView`
 `
 
 export const LimitContainer = styled.View`
-    min-height: 100%;
+    width: 98%;
     max-width: 400px;
-    // overflow-y: hidden;
+    overflow: hidden;
 `
 
 export const CenterContent = styled.View`
@@ -71,8 +71,8 @@ export const TextButton = styled.Text`
     margin-left: 5px
 `
 
-export const BioContainer = styled.TextInput`
-    padding: 12px 10px;
+export const BioContainer = styled.Text`
+    padding: 14px 10px;
     color: aliceblue;
     background-color: #441a19;
     border-radius: 5px;
