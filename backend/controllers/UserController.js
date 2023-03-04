@@ -98,8 +98,8 @@ const getCurrentProfile = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
     try {
-        const profile_picture = req.files?.profile_picture[0].filename;
-        const cover_image = req.files?.cover_image[0].filename;
+        const profile_picture = req.files?.profile_picture?.[0].filename;
+        const cover_image = req.files?.cover_image?.[0].filename;
         const { name, bio, user_name } = req.body;
 
         const user = await User.findById(req.user._id)
