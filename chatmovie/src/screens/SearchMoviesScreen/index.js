@@ -1,54 +1,44 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { StatusBar as StatusBarConfig, ActivityIndicator as Spinner } from "react-native";
 import { Container, ButtonGoBack, ContainerHeader, ViewLimitContent, SearchBar, SearchBarContainer, ButtonSearch, TitleQuery, TextRed, WithoutMovies } from "./styles";
-import { getSearchMovies, reset, setQuerySearch } from "../../slices/movieSlice";
 import { Feather, AntDesign } from '@expo/vector-icons';
+import movieService from "../../services/movieService";
 
 import CardMovie from "../../components/CardMovie";
 
 const SearchMoviesScreen = ({ navigation }) => {
-    const [searchMovie, setSearchMovie] = useState('');
     const [query, setQuery] = useState('');
+    const [showQuery, setShowQuery] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [movies, setMovies] = useState([]);
 
-    const [withoutMovie, setWithoutMovie] = useState(false);
-    const dispatch = useDispatch();
-    const { search } = useSelector(state => state.movies);
-
-    const navigationGoBack = () => {
-        dispatch(reset());
-        navigation.goBack();
+    const searchMovies = async (query) => {
+        const movies = await movieService.getSearchMovies(query);
+        return movies.results || [];
     }
 
-    const handleSearch = () => {
-        const separateWords = searchMovie.split(' ');
-        const filterWords = separateWords.filter(word => word !== '');
-        const query = filterWords.join('+');
-        setQuery(query);
-    }
-
-    useEffect(() => {
-        if (!query)
+    const handleSearch = async () => {
+        if(!query)
             return
 
-        dispatch(setQuerySearch(searchMovie.trim()));
-        dispatch(getSearchMovies(query));
-        setSearchMovie('');
-    }, [query])
-
-    useEffect(() => {
-        if (!search.movies.results)
-            return setWithoutMovie(false);
-
-        setWithoutMovie(search.movies.results.length === 0);
-    }, [search.movies]);
+        setLoading(true);
+        const separateWords = query.split(' ');
+        const filterWords = separateWords.filter(word => word !== '');
+        const formattedQuery = filterWords.join('+');
+        
+        const movies = await searchMovies(formattedQuery);
+        setLoading(false);
+        setShowQuery(query);
+        setQuery('');
+        setMovies(movies);
+    }
 
     return (
         <>
             <ContainerHeader paddingTop={StatusBarConfig.currentHeight}>
                 <ButtonGoBack
                     activeOpacity={0.6}
-                    onPress={navigationGoBack}
+                    onPress={() => navigation.goBack()}
                 >
                     <AntDesign name="arrowleft" size={28} color="white" />
                 </ButtonGoBack>
@@ -59,8 +49,8 @@ const SearchMoviesScreen = ({ navigation }) => {
                 <ViewLimitContent>
                     <SearchBarContainer>
                         <SearchBar
-                            value={searchMovie || ''}
-                            onChangeText={(text) => setSearchMovie(text)}
+                            value={query || ''}
+                            onChangeText={(text) => setQuery(text)}
                             onSubmitEditing={handleSearch}
                             cursorColor='red'
                             selectionColor='#441a19'
@@ -76,17 +66,17 @@ const SearchMoviesScreen = ({ navigation }) => {
                             <Feather name="search" size={24} color="white" />
                         </ButtonSearch>
                     </SearchBarContainer>
-                    {search.query && <TitleQuery>Você pesquisou por: <TextRed>{search.query}</TextRed></TitleQuery>}
-                    {search.loading && <Spinner
+                    {showQuery && <TitleQuery>Você pesquisou por: <TextRed>{showQuery}</TextRed></TitleQuery>}
+                    {loading && <Spinner
                         size="large"
                         color="red"
                         style={{marginVertical: 50}}
                         animating
                     />}
-                    {search.movies.results?.map((movie, i) =>
+                    {movies.map((movie, i) =>
                         <CardMovie key={i} movie={movie} navigation={navigation} />
                     )}
-                    {withoutMovie &&
+                    {showQuery && movies.length === 0 &&
                         <WithoutMovies>Não foi encontrado resultado para sua pesquisa.</WithoutMovies>
                     }
                 </ViewLimitContent>

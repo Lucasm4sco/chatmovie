@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getHomeList } from "../../slices/movieSlice";
-
+import { useDispatch } from "react-redux";
+import { getCurrentProfile } from '../../slices/userSlice';
+import { useAuth } from '../../hooks/useAuth.js';
 import { Container, CenterContent } from "./styles";
+import movieService from "../../services/movieService";
 
 import LoadingComponent from '../../components/LoadingComponent';
 import CarouselComponent from "../../components/CarouselComponent";
@@ -10,12 +11,25 @@ import ListMovieRow from "../../components/ListMovieRow";
 
 const HomeScreen = () => {
     const [chooseTrendingMovies, setChooseTrendingMovies] = useState([]);
-    const { movies, loading } = useSelector(state => state.movies);
+    const [loading, setLoading] = useState(false);
+    const [movies, setMovies] = useState([]);
+    const { auth } = useAuth();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getHomeList());
-    }, [dispatch]);
+        const loadData = async () => {
+            setLoading(true);
+            const dataMovies = await movieService.getHomeList();
+            setLoading(false);
+            setMovies(dataMovies);
+        }
+        loadData();
+    }, []);
+
+    useEffect(() => {
+        if (auth)
+            dispatch(getCurrentProfile())
+    }, [auth])
 
     useEffect(() => {
         if (!movies?.length)

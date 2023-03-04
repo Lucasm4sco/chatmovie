@@ -11,27 +11,15 @@ export const Container = styled.ScrollView`
     background-color: #121212;
 `
 
-export const ContainerButtons = styled.View`
-    width: 100%;
-    height: 60px;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
-    background-color: #111212;
-    overflow: hidden;
-    shadow-color: black;
-    shadow-radius: 10px;
-    shadow-opacity: 1;
-`
-
-export const ButtonGoBack = styled.TouchableHighlight`
+export const Button = styled.TouchableHighlight`
     height: 40px;
     width: 40px;
-    border-radius: 20px;
+    border-radius: 25px;
     align-items: center;
     justify-content: center;
     background-color: transparent;
+    border: 1px solid white;
+    margin: 5px 15px;
 `
 
 export const ImageMovie = styled.Image`
