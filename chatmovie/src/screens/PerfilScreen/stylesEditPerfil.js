@@ -30,6 +30,15 @@ export const UpdateUserText = styled.Text`
     font-weight: bold;
 `
 
+export const ErrorMessage = styled.Text`
+    text-align: center
+    min-height: 40px;
+    padding: 10px 15px;
+    background-color: #ff5252;
+    font-weight: 600;
+    color: #5c0002
+`
+
 export const ButtonChangePhoto = styled.TouchableOpacity`
     width: 100%;
     height: 100%;

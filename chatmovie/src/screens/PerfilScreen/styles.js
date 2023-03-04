@@ -31,6 +31,7 @@ export const PerfilPicture = styled.ImageBackground`
     border: 2px solid #bfbfbf;
     top: -50px;
     overflow: hidden;
+    background-color: black;
 `
 
 export const PerfilName = styled.Text`

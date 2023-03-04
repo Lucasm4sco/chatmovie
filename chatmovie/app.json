@@ -28,6 +28,14 @@
     },
     "web": {
       "favicon": ""
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow chatmovie to access your photos."
+        }
+      ]
+    ]
   }
 }

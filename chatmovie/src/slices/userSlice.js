@@ -4,7 +4,11 @@ import { removeDataStorage } from "../utils/storage";
 
 const initialState = {
     user: null,
-    loading: false,
+    update: {
+        loading: false,
+        error: null,
+        success: false
+    },
     friends: [],
     friend_requests: [],
     friend_requests_sent: [],
@@ -29,6 +33,18 @@ export const getCurrentProfile = createAsyncThunk(
     }
 )
 
+export const updateUserProfile = createAsyncThunk(
+    'user/updateprofile',
+    async (data, thunkAPI) => {
+        const userData = await userService.updateUserProfile(data);
+
+        if (userData.errors)
+            return thunkAPI.rejectWithValue(userData.errors[0]);
+
+        return userData
+    }
+)
+
 export const getFavoriteMovies = createAsyncThunk(
     'user/movie',
     async (id = null) => {
@@ -48,7 +64,13 @@ export const getFriends = createAsyncThunk(
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        resetUpdate: (state) => {
+            state.update.error = null;
+            state.update.loading = false;
+            state.update.success = false;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getCurrentProfile.fulfilled, (state, { payload }) => {
@@ -62,6 +84,22 @@ const userSlice = createSlice({
                 state.loading = false;
                 removeDataStorage()
             })
+            .addCase(updateUserProfile.fulfilled, (state, { payload }) => {
+                state.user = payload;
+                state.update.loading = false;
+                state.update.error = null;
+                state.update.success = true;
+            })
+            .addCase(updateUserProfile.pending, (state) => {
+                state.update.loading = true;
+                state.update.error = null;
+                state.update.success = false;
+            })
+            .addCase(updateUserProfile.rejected, (state, { payload }) => {
+                state.update.loading = false;
+                state.update.error = payload;
+                state.update.success = false;
+            })
             .addCase(getFavoriteMovies.fulfilled, (state, { payload }) => {
                 state.favorite_movies = payload.movies;
             })
@@ -73,4 +111,5 @@ const userSlice = createSlice({
     }
 })
 
+export const { resetUpdate } = userSlice.actions;
 export default userSlice.reducer;

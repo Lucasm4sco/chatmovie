@@ -24,6 +24,14 @@ const makePOST = async (type, endpoint = '', data, config = {}) => {
     return response
 }
 
+const makePUT = async (type, endpoint = '', data, config = {}) => {
+    const response = await axios.put(BASE_URL + REQUESTS_ENDPOINTS[type] + endpoint, data, config)
+        .then(response => response.data)
+        .catch(err => err.response.data);
+
+    return response;
+}
+
 const getURLImage = (type, endpoint) => `${BASE_URL}/${type}/${endpoint}`
 
 const getHeaderWithAuthorization = async () => {
@@ -35,6 +43,7 @@ const getHeaderWithAuthorization = async () => {
 const Requests = {
     makeGET,
     makePOST,
+    makePUT,
     getURLImage,
     getHeaderWithAuthorization
 }

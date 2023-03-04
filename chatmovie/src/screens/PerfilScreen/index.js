@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { getCurrentProfile } from "../../slices/userSlice";
+import { useFocusEffect } from '@react-navigation/native';
+import { getCurrentProfile, resetUpdate } from "../../slices/userSlice";
 import { Container, CoverImage, LimitContainer, PerfilPicture, CenterContent, PerfilName, UserName, BioContainer, ContainerRow, Button, TextButton, TitleSection, WithoutMovies } from "./styles";
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import Requests from "../../utils/requestsAPI";
@@ -24,7 +25,9 @@ const PerfilScreen = ({ navigation }) => {
             return
 
         if (user.cover_image)
-            setCoverImage(Requests.getURLImage('capa', user.cover_image));
+            setCoverImage({
+                uri: Requests.getURLImage('capa', user.cover_image)
+            });
 
         if (user.profile_picture)
             setProfilePicture({
@@ -32,6 +35,10 @@ const PerfilScreen = ({ navigation }) => {
             });
 
     }, [user])
+
+    useFocusEffect(() => {
+        dispatch(resetUpdate())
+    })
 
     if (loading)
         return <LoadingComponent />
@@ -46,13 +53,9 @@ const PerfilScreen = ({ navigation }) => {
             }}
         >
             <LimitContainer>
-                {coverImage ? (
-                    <CoverImage
-                        source={{ uri: coverImage }}
-                    />
-                ) : (
-                    <CoverImage />
-                )}
+                <CoverImage
+                    source={coverImage}
+                />
                 <CenterContent>
                     <PerfilPicture source={profilePicture} />
                 </CenterContent>
