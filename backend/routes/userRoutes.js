@@ -19,7 +19,7 @@ userRoutes.post('/friends', authGuard, UserController.sendFriendRequest);
 userRoutes.post('/friends/accept', authGuard, UserController.acceptFriendRequest);
 userRoutes.post('/friends/reject', authGuard, UserController.rejectFriendRequest);
 
-userRoutes.put('/profile', authGuard, imageUploadValidation, UserController.updateUserProfile);
+userRoutes.put('/profile', authGuard, imageUploadValidation, updateUserValidations(), handleValidations, UserController.updateUserProfile);
 
 userRoutes.patch('/movies', authGuard, UserController.updateFavoriteMovies);
 
