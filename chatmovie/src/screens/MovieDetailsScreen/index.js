@@ -62,17 +62,15 @@ const MovieDetailsScreen = ({ navigation, route }) => {
     const handleShowMoreButton = () => numberOfLines === 3 ? setNumberOfLines(0) : setNumberOfLines(3)
 
     return (
-        <Container
-            contentContainerStyle={{ alignItems: 'center' }}
-        >
+        <>
             <HeaderGoBack navigation={navigation} >
                 {user && (
                     <Button
                         onPress={() => {
-                            favorite_movies.includes(movieDetails.id) 
-                            ? setFav(favorite_movies.filter(id => id !== movieDetails.id)) : 
-                            setFav([...favorite_movies, movieDetails.id])
-                         }}
+                            favorite_movies.includes(movieDetails.id)
+                                ? setFav(favorite_movies.filter(id => id !== movieDetails.id)) :
+                                setFav([...favorite_movies, movieDetails.id])
+                        }}
                     >
                         {favorite_movies.includes(movieDetails?.id) ? (
                             <AntDesign name="heart" size={24} color="white" />
@@ -82,47 +80,52 @@ const MovieDetailsScreen = ({ navigation, route }) => {
                     </Button>
                 )}
             </HeaderGoBack>
-            <ImageMovie
-                source={{ uri: urlImage }}
-            />
-            <TitleMovie>{movieDetails?.name || movieDetails?.title}</TitleMovie>
-            <ContainerGenres>
-                {movieDetails?.genres.map((genre) => (
-                    <Genre key={genre.name}>{genre.name}</Genre>
-                ))}
-            </ContainerGenres>
-            <ViewLimitContent>
-                <SubTitle>Descrição</SubTitle>
-                {movieDetails?.release_date && (
-                    <TextYearMovie>
-                        {new Date(movieDetails.release_date).getFullYear()}
-                    </TextYearMovie>
-                )}
-            </ViewLimitContent>
-            <DescriptionMovie
-                numberOfLines={numberOfLines}
-                onTextLayout={handleTextLayout}
-                textAlign={movieDetails?.overview ? 'justify' : 'center'}
+            <Container
+                contentContainerStyle={{ alignItems: 'center' }}
             >
-                {movieDetails?.overview ? movieDetails.overview.trim() : 'Não foi encontrado descrição.'}
-            </DescriptionMovie>
-            {showMore && (
+
+                <ImageMovie
+                    source={{ uri: urlImage }}
+                />
+                <TitleMovie>{movieDetails?.name || movieDetails?.title}</TitleMovie>
+                <ContainerGenres>
+                    {movieDetails?.genres.map((genre) => (
+                        <Genre key={genre.name}>{genre.name}</Genre>
+                    ))}
+                </ContainerGenres>
                 <ViewLimitContent>
-                    <TouchableOpacity
-                        onPress={handleShowMoreButton}
-                    >
-                        <TextShowMore>
-                            {numberOfLines === 3 ? 'Ver mais' : 'Ver menos'}
-                        </TextShowMore>
-                    </TouchableOpacity>
+                    <SubTitle>Descrição</SubTitle>
+                    {movieDetails?.release_date && (
+                        <TextYearMovie>
+                            {new Date(movieDetails.release_date).getFullYear()}
+                        </TextYearMovie>
+                    )}
                 </ViewLimitContent>
-            )}
-            <ListMovieRow
-                title='Filmes Recomendados'
-                items={recommendedMovies.results}
-                isPoster
-            />
-        </Container>
+                <DescriptionMovie
+                    numberOfLines={numberOfLines}
+                    onTextLayout={handleTextLayout}
+                    textAlign={movieDetails?.overview ? 'justify' : 'center'}
+                >
+                    {movieDetails?.overview ? movieDetails.overview.trim() : 'Não foi encontrado descrição.'}
+                </DescriptionMovie>
+                {showMore && (
+                    <ViewLimitContent>
+                        <TouchableOpacity
+                            onPress={handleShowMoreButton}
+                        >
+                            <TextShowMore>
+                                {numberOfLines === 3 ? 'Ver mais' : 'Ver menos'}
+                            </TextShowMore>
+                        </TouchableOpacity>
+                    </ViewLimitContent>
+                )}
+                <ListMovieRow
+                    title='Filmes Recomendados'
+                    items={recommendedMovies.results}
+                    isPoster
+                />
+            </Container>
+        </>
     )
 }
 

@@ -1,11 +1,24 @@
 import axios from 'axios';
 import { getToken } from './storage.js';
+import { API_KEY_TMDB } from '@env';
 
 export const BASE_URL_IMAGE = 'https://image.tmdb.org/t/p';
 const BASE_URL = 'http://192.168.2.199:5000';
+const BASE_URL_TMBD = "https://api.themoviedb.org/3";
 const REQUESTS_ENDPOINTS = {
     users: '/api/users',
     movies: '/api/movies'
+}
+
+export const makeRequestTMDB = async (path, filter = '') => {
+    if (filter)
+        filter += '&'
+
+    const URL = `${BASE_URL_TMBD}${path}?${filter}language=pt-BR&api_key=${API_KEY_TMDB}`;
+
+    return await axios.get(URL)
+        .then(res => res.data)
+        .catch(err => err.response.data);
 }
 
 const makeGET = async (type, endpoint = '', config = {}) => {

@@ -1,6 +1,6 @@
-import { makeRequestTMDB } from "../utils/request.js";
+import { makeRequestTMDB } from "../utils/requestsAPI.js";
 
-export const getListHome = async () => {
+const getListHome = async () => {
     return [
         {
             slug: 'toprated',
@@ -40,17 +40,26 @@ export const getListHome = async () => {
     ]
 }
 
-export const getDetails = async (type, id) => {
+const getDetails = async (type, id) => {
     const data = await makeRequestTMDB(`/${type}/${id}`);
     return data;
 }
 
-export const getRecommended = async (type, id) => {
+const getRecommended = async (type, id) => {
     const recommended = await makeRequestTMDB(`/${type}/${id}/recommendations`);
     return recommended;
 }
 
-export const getSearch = async (type, query) => {
+const getSearch = async (type, query) => {
     const dataSearch = await makeRequestTMDB(`/search/${type}`, 'query=' + query);
     return dataSearch;
 }
+
+const TMDB = {
+    getListHome,
+    getDetails,
+    getRecommended,
+    getSearch
+}
+
+export default TMDB

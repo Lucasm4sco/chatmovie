@@ -1,22 +1,22 @@
-import Requests from "../utils/requestsAPI";
+import TMDB from "../data/tmdb";
 
 const getHomeList = async () => {
-    const listHome = await Requests.makeGET('movies');
+    const listHome = await TMDB.getListHome();
     return listHome;
 }
 
 const getMovieDetails = async (id) => {
-    const movieDetails = await Requests.makeGET('movies', '/' + id);
+    const movieDetails = await TMDB.getDetails('movie', id);
     return movieDetails;
 }
 
 const getRecommendedMovies = async (id) => {
-    const recommendedMovies = await Requests.makeGET('movies', '/' + id + '/recommendations');
+    const recommendedMovies = await TMDB.getRecommended('movie', id);
     return recommendedMovies;
 }
 
 const getSearchMovies = async(query) => {
-    const foundMovies = await Requests.makeGET('movies', '/search?query='+query);
+    const foundMovies = await TMDB.getSearch('movie', query);
     return foundMovies;
 }
 
