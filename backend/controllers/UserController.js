@@ -139,9 +139,12 @@ const getUserFriends = async (req, res) => {
 }
 
 const getUsers = async (req, res) => {
+    const user = await User.findById(req.user._id)
+        .select('friends friends_requests');
+
     const users = await User.find()
-        .where('_id').ne(req.user._id) // avoid getting the same user
-        .nin(req.user.friends.concat(req.user.friend_requests)) // avoid bringing users added or who sent requests
+        .where('_id').ne(user._id) // avoid getting the same user
+        .nin(user.friends.concat(user.friend_requests)) // avoid bringing users added or who sent requests
         .sort({ createdAt: 'descending' }) // sort the query by newest
         .select('name user_name bio profile_picture cover_image')
         .exec()
