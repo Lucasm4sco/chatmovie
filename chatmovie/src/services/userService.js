@@ -29,11 +29,19 @@ const getFriends = async () => {
     return friendsData
 }
 
+const getListUsers = async () => {
+    const listUsers = await Requests.makeGET('users', '/', {
+        headers: await Requests.getHeaderWithAuthorization()
+    });
+    return listUsers
+}
+
 const userService = {
     getCurrentProfile,
     updateUserProfile,
     getFavoriteMovies,
-    getFriends
+    getFriends,
+    getListUsers
 };
 
 export default userService;

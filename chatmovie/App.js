@@ -16,7 +16,8 @@ import WithoutConnectionScreen from './src/screens/WithoutConnectionScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
 import SearchMoviesScreen from './src/screens/SearchMoviesScreen';
-import EditProfileScreen from './src/screens/PerfilScreen/EditPerfilScreen';
+import EditProfileScreen from './src/screens/PerfilScreens/EditPerfilScreen';
+import UsersScreen from './src/screens/UsersScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
 import HeaderTabNavigator from './src/components/HeaderTabNavigator';
@@ -42,7 +43,6 @@ const RenderNavigator = ({ children, auth }) => {
   )
 }
 
-
 const TabsNavigator = () => {
   const { auth } = useAuth();
 
@@ -50,7 +50,7 @@ const TabsNavigator = () => {
     return (
       <RenderNavigator auth={auth}>
         <Tab.Screen name='Home' component={HomeScreen} />
-        <Tab.Screen name='Add' component={HomeScreen} />
+        <Tab.Screen name='Add' component={UsersScreen} />
         <Tab.Screen name='Authenticate' component={AuthenticateUser} />
         <Tab.Screen name='Messages' component={HomeScreen} />
       </RenderNavigator>

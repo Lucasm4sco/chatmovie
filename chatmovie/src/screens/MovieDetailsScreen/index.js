@@ -5,7 +5,7 @@ import { BASE_URL_IMAGE } from "../../utils/requestsAPI";
 import { AntDesign } from '@expo/vector-icons';
 import movieService from "../../services/movieService";
 
-import { Container, Button, ImageMovie, TitleMovie, ContainerGenres, Genre, SubTitle, TextYearMovie, DescriptionMovie, ViewLimitContent, TextShowMore } from "./styles";
+import { Container, ButtonFavorite, ImageMovie, TitleMovie, ContainerGenres, Genre, SubTitle, TextYearMovie, DescriptionMovie, ViewLimitContent, TextShowMore } from "./styles";
 
 import LoadingComponent from "../../components/LoadingComponent";
 import HeaderGoBack from "../../components/HeaderGoBack";
@@ -65,7 +65,8 @@ const MovieDetailsScreen = ({ navigation, route }) => {
         <>
             <HeaderGoBack navigation={navigation} >
                 {user && (
-                    <Button
+                    <ButtonFavorite
+                        activeOpacity={0.6}
                         onPress={() => {
                             favorite_movies.includes(movieDetails.id)
                                 ? setFav(favorite_movies.filter(id => id !== movieDetails.id)) :
@@ -77,7 +78,7 @@ const MovieDetailsScreen = ({ navigation, route }) => {
                         ) : (
                             <AntDesign name="hearto" size={24} color="white" />
                         )}
-                    </Button>
+                    </ButtonFavorite>
                 )}
             </HeaderGoBack>
             <Container

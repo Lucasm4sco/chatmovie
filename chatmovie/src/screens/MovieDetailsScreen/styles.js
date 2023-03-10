@@ -11,7 +11,7 @@ export const Container = styled.ScrollView`
     background-color: #121212;
 `
 
-export const Button = styled.TouchableHighlight`
+export const ButtonFavorite = styled.TouchableOpacity`
     height: 40px;
     width: 40px;
     border-radius: 25px;

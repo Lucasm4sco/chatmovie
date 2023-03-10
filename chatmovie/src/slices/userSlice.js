@@ -12,6 +12,7 @@ const initialState = {
     friends: [],
     friend_requests: [],
     friend_requests_sent: [],
+    friend_requests_loading: {},
     favorite_movies: []
 }
 

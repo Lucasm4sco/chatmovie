@@ -2,7 +2,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { ScrollView, StyleSheet } from "react-native";
 import { useAuth } from '../../hooks/useAuth.js';
 
-import PerfilScreen from "../../screens/PerfilScreen";
+import PerfilScreen from "../../screens/PerfilScreens";
 import Login from "../../screens/AuthenticateUserScreens/Login";
 import Register from "../../screens/AuthenticateUserScreens/Register";
 
