@@ -53,7 +53,7 @@ const ListUsers = ({ navigation }) => {
             {listUsers.map(user => (
                 <CardUser key={user?._id?.toString()} >
                     <>
-                        <ContainerInfoUser>
+                        <ContainerInfoUser width='85'>
                             {user?.profile_picture ? (
                                 <UserImage source={{
                                     uri: Requests.getURLImage('perfil', user.profile_picture)
