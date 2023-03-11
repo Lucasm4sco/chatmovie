@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { sendFriendRequest } from "../../slices/userSlice";
 import { ActivityIndicator as Spinner } from "react-native"
 import { ContainerUsers, CardUser, ContainerInfoUser, UserImage, UserName, ContainerAddIcon, ButtonAdd } from "./styles"
 import { AntDesign, Feather } from '@expo/vector-icons'
@@ -9,6 +10,7 @@ import imgUserIcon from '../../assets/icons/user.png'
 
 const HandleAddIcon = ({ navigation, user }) => {
     const { friend_requests_sent, friend_requests_loading } = useSelector(state => state.user);
+    const dispatch = useDispatch();
 
     const requestAlreadySentToUser = friend_requests_sent?.includes(user?._id.toString());
     const sendingRequestToUser = friend_requests_loading?.[user?._id.toString()]
@@ -21,6 +23,7 @@ const HandleAddIcon = ({ navigation, user }) => {
 
     return (
         <ButtonAdd
+            onPress={() => dispatch(sendFriendRequest(user._id))}
         >
             <AntDesign name="adduser" size={26} color="white" />
         </ButtonAdd>

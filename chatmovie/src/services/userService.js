@@ -1,6 +1,6 @@
 import Requests from "../utils/requestsAPI";
 
-const getCurrentProfile = async (id) => {
+const getCurrentProfile = async () => {
     const userData = await Requests.makeGET('users', '/profile', {
         headers: await Requests.getHeaderWithAuthorization()
     });
@@ -29,6 +29,15 @@ const getFriends = async () => {
     return friendsData
 }
 
+const sendFriendRequest = async (id) => {
+    const friendsData = await Requests.makePOST('users', '/friends', {
+        id_recipient_user: id
+    }, {
+        headers: await Requests.getHeaderWithAuthorization()
+    });
+    return friendsData
+}
+
 const getListUsers = async () => {
     const listUsers = await Requests.makeGET('users', '/', {
         headers: await Requests.getHeaderWithAuthorization()
@@ -36,12 +45,21 @@ const getListUsers = async () => {
     return listUsers
 }
 
+const getUserProfile = async (id) => {
+    const userProfile = await Requests.makeGET('users', '/' + id, {
+        headers: await Requests.getHeaderWithAuthorization()
+    })
+    return userProfile;
+}
+
 const userService = {
     getCurrentProfile,
     updateUserProfile,
     getFavoriteMovies,
     getFriends,
-    getListUsers
+    sendFriendRequest,
+    getListUsers,
+    getUserProfile
 };
 
 export default userService;
