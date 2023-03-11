@@ -13,7 +13,8 @@ const initialState = {
     friend_requests: [],
     friend_requests_sent: [],
     friend_requests_loading: {},
-    favorite_movies: []
+    favorite_movies: [],
+    search_user: ''
 }
 
 export const getCurrentProfile = createAsyncThunk(
@@ -83,6 +84,9 @@ const userSlice = createSlice({
         },
         setLoadingSendRequest: (state, { payload }) => {
             state.friend_requests_loading[payload] = true
+        },
+        setSearchUser: (state, { payload }) => {
+            state.search_user = payload
         }
     },
     extraReducers: (builder) => {
@@ -128,11 +132,8 @@ const userSlice = createSlice({
                 state.friend_requests_sent = payload.friend_requests_sent;
                 state.friend_requests_loading = {}
             })
-            .addCase(sendFriendRequest.pending, (state) => {
-
-            })
     }
 })
 
-export const { resetUpdate } = userSlice.actions;
+export const { resetUpdate, setSearchUser } = userSlice.actions;
 export default userSlice.reducer;

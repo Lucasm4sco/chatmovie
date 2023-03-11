@@ -1,18 +1,17 @@
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux";
+import { getFriends, setSearchUser } from "../../slices/userSlice";
 import { Container, LimitContainer, SearchBar, InputSearch, IconSearch, ContainerTabBar, ButtonNavigate, TextButtonNavigate, TextAlertRequests } from "./styles"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import ListUsers from "../../components/ListUsers";
 import ListUsersRequest from "../../components/ListUsers/ListUsersRequest";
 import ListFriends from "../../components/ListUsers/listFriends";
-import { getFriends } from "../../slices/userSlice";
 
 const Tab = createMaterialTopTabNavigator();
 
-const TabBarNavigation = ({ navigation, state }) => {
+const TabBarNavigation = ({ navigation, state, dispatch }) => {
     const { friend_requests } = useSelector(state => state.user);
-    const dispatch = useDispatch();
 
     const isActiveRoute = (route) => {
         const routes = {
@@ -70,7 +69,12 @@ const TabBarNavigation = ({ navigation, state }) => {
 }
 
 const UsersScreen = () => {
-    const [search, setSearch] = useState('');
+    const { search_user } = useSelector(state => state.user);
+    const dispatch = useDispatch();
+
+    const handleSearch = (text) => {
+        dispatch(setSearchUser(text))
+    }
 
     return (
         <Container>
@@ -81,14 +85,14 @@ const UsersScreen = () => {
                         selectionColor='red'
                         placeholder='Pesquise por usuários...'
                         placeholderTextColor='#ccc'
-                        value={search || ''}
-                        onChangeText={text => setSearch(text)}
+                        value={search_user || ''}
+                        onChangeText={handleSearch}
                     />
                     <IconSearch name="search" size={24} color="#ccc" />
                 </SearchBar>
             </LimitContainer>
             <Tab.Navigator
-                tabBar={props => <TabBarNavigation {...props} />}
+                tabBar={props => <TabBarNavigation {...props} dispatch={dispatch} />}
                 screenOptions={{
                     swipeEnabled: false
                 }}

@@ -71,12 +71,13 @@ const PerfilScreen = ({ navigation }) => {
                     </Button>
                     <Button
                         bgColor='#133463'
+                        onPress={() => navigation.navigate('list-friends')}
                     >
                         <Feather name="users" size={20} color="white" />
                         <TextButton>Amigos</TextButton>
                     </Button>
                 </ContainerRow>
-                <BioContainer editable={false}>
+                <BioContainer>
                     {user?.bio ? user.bio : 'Nenhuma bio definida ainda.'}
                 </BioContainer>
                 {favorite_movies.length ? (

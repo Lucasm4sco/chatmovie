@@ -6,22 +6,12 @@ import Requests from "../../utils/requestsAPI"
 
 import imgUserIcon from '../../assets/icons/user.png'
 
-const RenderCard = ({ navigation, id }) => {
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const loadUser = async () => {
-            const user = await userService.getUserProfile(id)
-            setUser(user);
-        }
-        loadUser()
-    }, [])
-
-    if(!user)
-        return null
+const RenderCard = ({ navigation, user }) => {
 
     return (
-        <CardUser>
+        <CardUser
+            onPress={() => navigation.navigate('UserProfile', { user })}
+        >
             <ContainerInfoUser width='100'>
                 {user.profile_picture ? (
                     <UserImage
@@ -39,7 +29,34 @@ const RenderCard = ({ navigation, id }) => {
 }
 
 const ListFriends = ({ navigation }) => {
-    const { friends } = useSelector(state => state.user);
+    const { friends, search_user } = useSelector(state => state.user);
+    const [allFriends, setAllFriends] = useState([]);
+    const [listFriends, setListFriends] = useState([]);
+
+    useEffect(() => {
+        const loadUserFriends = async () => {
+            const allUserFriends = [];
+
+            for(let id of friends){
+                const userData = await userService.getUserProfile(id);
+                allUserFriends.unshift(userData);
+            }
+
+            setAllFriends(allUserFriends);
+            setListFriends(allUserFriends);
+        }
+
+        loadUserFriends()
+    }, [friends])
+
+    useEffect(() => {
+        const regex = new RegExp(search_user, 'ig');
+        const filterUsersBySearch = allFriends.filter(user => {
+            const userMatchesSearch = user.user_name.match(regex) || user.name.match(regex);
+            return userMatchesSearch
+        })
+        setListFriends(filterUsersBySearch);
+    }, [search_user])
 
     return (
         <ContainerUsers
@@ -50,7 +67,9 @@ const ListFriends = ({ navigation }) => {
             }}
         >
             {friends.length ? (
-                friends.map(id => <RenderCard key={id} id={id} navigation={navigation} />)
+                listFriends.map(user => (
+                    <RenderCard key={user?._id?.toString()} user={user} navigation={navigation} />
+                ))
             ) : (
                 <></>
             )}

@@ -31,7 +31,10 @@ const HandleAddIcon = ({ navigation, user }) => {
 }
 
 const ListUsers = ({ navigation }) => {
+    const [allUsers, setAllUsers] = useState([]);
     const [listUsers, setListUsers] = useState([]);
+    const { search_user } = useSelector(state => state.user);
+
 
     useEffect(() => {
         const loadData = async () => {
@@ -39,11 +42,21 @@ const ListUsers = ({ navigation }) => {
             if (users.errors)
                 console.log(users.errors[0]);
 
+            setAllUsers(users)
             setListUsers(users)
         }
 
         loadData()
     }, [])
+
+    useEffect(() => {
+        const regex = new RegExp(search_user, 'ig');
+        const filterUsersBySearch = allUsers.filter(user => {
+            const userMatchesSearch = user.user_name.match(regex) || user.name.match(regex);
+            return userMatchesSearch
+        })
+        setListUsers(filterUsersBySearch);
+    }, [search_user])
 
     return (
         <ContainerUsers
@@ -54,7 +67,10 @@ const ListUsers = ({ navigation }) => {
             }}
         >
             {listUsers.map(user => (
-                <CardUser key={user?._id?.toString()} >
+                <CardUser
+                    key={user?._id?.toString()}
+                    onPress={() => navigation.navigate('UserProfile', { user })}
+                >
                     <>
                         <ContainerInfoUser width='85'>
                             {user?.profile_picture ? (

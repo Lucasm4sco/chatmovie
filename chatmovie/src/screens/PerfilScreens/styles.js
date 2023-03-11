@@ -78,7 +78,7 @@ export const BioContainer = styled.Text`
     background-color: #441a19;
     border-radius: 5px;
     text-align: center;
-    margin-bottom: 10px;
+    margin: 10px;
 `
 
 export const TitleSection = styled.Text`
