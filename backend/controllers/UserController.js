@@ -129,13 +129,10 @@ const updateUserProfile = async (req, res) => {
 }
 
 const getUserFriends = async (req, res) => {
-    const user = req.user;
-    const friends = {
-        friends: user.friends,
-        friend_requests: user.friend_requests,
-        friend_requests_sent: user.friend_requests_sent
-    }
-    return res.status(200).json(friends);
+    const userFriends = await User.findById(req.user._id)
+        .select('friends friend_requests friend_requests_sent -_id');
+
+    return res.status(200).json(userFriends);
 }
 
 const getUsers = async (req, res) => {
