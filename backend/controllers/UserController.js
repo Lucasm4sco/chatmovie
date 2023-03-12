@@ -137,7 +137,7 @@ const getUserFriends = async (req, res) => {
 
 const getUsers = async (req, res) => {
     const user = await User.findById(req.user._id)
-        .select('friends friends_requests');
+        .select('friends friend_requests');
 
     const users = await User.find()
         .where('_id').ne(user._id) // avoid getting the same user
@@ -270,16 +270,16 @@ const sendFriendRequest = async (req, res) => {
 
 const acceptFriendRequest = async (req, res) => {
     try {
-        const friend_requests = req.user.friend_requests;
+        const user = await User.findById(req.user._id);
         const { id_user_request } = req.body;
+        const isInvalidRequest = !user.friend_requests.includes(id_user_request);
 
-        if (!friend_requests.includes(id_user_request))
+        if (isInvalidRequest)
             return res.status(400).json({ errors: ['ID enviado não corresponde com as solicitações de amizade.'] });
 
-        const user = await User.findById(req.user._id);
         const userWithRequest = await User.findById(id_user_request);
         // removes user id received from friend requests and add to friends array
-        user.friend_requests = friend_requests.filter(id => id.toString() !== userWithRequest._id.toString());
+        user.friend_requests = user.friend_requests.filter(id => id.toString() !== userWithRequest._id.toString());
         user.friends.push(userWithRequest._id);
         // removes the current user id from the sent friend requests array and adds it to the friends array
         userWithRequest.friend_requests_sent = userWithRequest.friend_requests_sent.filter(id => id.toString() !== user._id.toString())
@@ -301,16 +301,16 @@ const acceptFriendRequest = async (req, res) => {
 
 const rejectFriendRequest = async (req, res) => {
     try {
-        const friend_requests = req.user.friend_requests;
+        const user = await User.findById(req.user._id);
         const { id_user_request } = req.body;
+        const isInvalidRequest = !user.friend_requests.includes(id_user_request);
 
-        if (!friend_requests.includes(id_user_request))
+        if (isInvalidRequest)
             return res.status(400).json({ errors: ['ID enviado não corresponde com as solicitações de amizade.'] });
 
-        const user = await User.findById(req.user._id);
         const userWithRequest = await User.findById(id_user_request);
         // removes user id received from friend requests array
-        user.friend_requests = friend_requests.filter(id => id.toString() !== userWithRequest._id.toString());
+        user.friend_requests = user.friend_requests.filter(id => id.toString() !== userWithRequest._id.toString());
         userWithRequest.friend_requests_sent = userWithRequest.friend_requests_sent.filter(id => id.toString() !== user._id.toString());
         // save the changes
         await user.save();
