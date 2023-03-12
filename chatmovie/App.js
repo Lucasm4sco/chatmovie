@@ -18,6 +18,7 @@ import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
 import SearchMoviesScreen from './src/screens/SearchMoviesScreen';
 import EditProfileScreen from './src/screens/PerfilScreens/EditPerfilScreen';
 import UsersScreen from './src/screens/UsersScreen';
+import UserProfileScreen from './src/screens/PerfilScreens/UserProfileScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
 import HeaderTabNavigator from './src/components/HeaderTabNavigator';
@@ -75,6 +76,7 @@ const App = () => {
         <Stack.Screen name='MovieDetails' component={MovieDetailsScreen} />
         <Stack.Screen name='Search' component={SearchMoviesScreen} />
         <Stack.Screen name='EditProfile' component={EditProfileScreen} />
+        <Stack.Screen name='UserProfile' component={UserProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

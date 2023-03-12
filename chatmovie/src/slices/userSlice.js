@@ -73,6 +73,26 @@ export const sendFriendRequest = createAsyncThunk(
     }
 )
 
+export const acceptFriendRequest = createAsyncThunk(
+    'user/accept',
+    async (id, thunkAPI) => {
+        const { setLoadingSendRequest } = userSlice.actions;
+        thunkAPI.dispatch(setLoadingSendRequest(id))
+        const friendsData = await userService.acceptFriendRequest(id);
+        return friendsData
+    }
+)
+
+export const rejectFriendRequest = createAsyncThunk(
+    'user/reject',
+    async (id, thunkAPI) => {
+        const { setLoadingSendRequest } = userSlice.actions;
+        thunkAPI.dispatch(setLoadingSendRequest(id))
+        const friendsData = await userService.rejectFriendRequest(id);
+        return friendsData
+    }
+)
+
 const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -127,6 +147,20 @@ const userSlice = createSlice({
                 state.friend_requests_sent = payload.friend_requests_sent;
             })
             .addCase(sendFriendRequest.fulfilled, (state, { payload }) => {
+                state.friends = payload.friends;
+                state.friend_requests = payload.friend_requests;
+                state.friend_requests_sent = payload.friend_requests_sent;
+                state.friend_requests_loading = {}
+            })
+            .addCase(acceptFriendRequest.fulfilled, (state, { payload }) => {
+                console.log(payload)
+                state.friends = payload.friends;
+                state.friend_requests = payload.friend_requests;
+                state.friend_requests_sent = payload.friend_requests_sent;
+                state.friend_requests_loading = {}
+            })
+            .addCase(rejectFriendRequest.fulfilled, (state, { payload }) => {
+                console.log(payload)
                 state.friends = payload.friends;
                 state.friend_requests = payload.friend_requests;
                 state.friend_requests_sent = payload.friend_requests_sent;

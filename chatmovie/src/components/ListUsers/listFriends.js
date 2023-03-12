@@ -7,7 +7,6 @@ import Requests from "../../utils/requestsAPI"
 import imgUserIcon from '../../assets/icons/user.png'
 
 const RenderCard = ({ navigation, user }) => {
-
     return (
         <CardUser
             onPress={() => navigation.navigate('UserProfile', { user })}

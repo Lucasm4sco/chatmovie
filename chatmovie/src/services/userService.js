@@ -29,15 +29,6 @@ const getFriends = async () => {
     return friendsData
 }
 
-const sendFriendRequest = async (id) => {
-    const friendsData = await Requests.makePOST('users', '/friends', {
-        id_recipient_user: id
-    }, {
-        headers: await Requests.getHeaderWithAuthorization()
-    });
-    return friendsData
-}
-
 const getListUsers = async () => {
     const listUsers = await Requests.makeGET('users', '/', {
         headers: await Requests.getHeaderWithAuthorization()
@@ -52,14 +43,43 @@ const getUserProfile = async (id) => {
     return userProfile;
 }
 
+const sendFriendRequest = async (id) => {
+    const friendsData = await Requests.makePOST('users', '/friends', {
+        id_recipient_user: id
+    }, {
+        headers: await Requests.getHeaderWithAuthorization()
+    });
+    return friendsData
+}
+
+const acceptFriendRequest = async(id) => {
+    const friendsData = await Requests.makePOST('users', '/friends/accept', {
+        id_user_request: id
+    }, {
+        headers: await Requests.getHeaderWithAuthorization()
+    });
+    return friendsData
+}
+
+const rejectFriendRequest = async (id) => {
+    const friendsData = await Requests.makePOST('users', '/friends/reject', {
+        id_user_request: id
+    }, {
+        headers: await Requests.getHeaderWithAuthorization()
+    });
+    return friendsData
+}
+
 const userService = {
     getCurrentProfile,
     updateUserProfile,
     getFavoriteMovies,
     getFriends,
-    sendFriendRequest,
     getListUsers,
-    getUserProfile
+    getUserProfile,
+    sendFriendRequest,
+    acceptFriendRequest,
+    rejectFriendRequest
 };
 
 export default userService;

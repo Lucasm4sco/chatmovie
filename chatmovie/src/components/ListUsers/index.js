@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { sendFriendRequest } from "../../slices/userSlice";
+import { getFriends, sendFriendRequest } from "../../slices/userSlice";
+import { useIsFocused } from '@react-navigation/native';
 import { ActivityIndicator as Spinner } from "react-native"
 import { ContainerUsers, CardUser, ContainerInfoUser, UserImage, UserName, ContainerAddIcon, ButtonAdd } from "./styles"
 import { AntDesign, Feather } from '@expo/vector-icons'
+
 import userService from "../../services/userService"
 import Requests from "../../utils/requestsAPI"
 import imgUserIcon from '../../assets/icons/user.png'
 
-const HandleAddIcon = ({ navigation, user }) => {
+const HandleAddIcon = ({ user, dispatch }) => {
     const { friend_requests_sent, friend_requests_loading } = useSelector(state => state.user);
-    const dispatch = useDispatch();
-
     const requestAlreadySentToUser = friend_requests_sent?.includes(user?._id.toString());
     const sendingRequestToUser = friend_requests_loading?.[user?._id.toString()]
 
@@ -34,13 +34,15 @@ const ListUsers = ({ navigation }) => {
     const [allUsers, setAllUsers] = useState([]);
     const [listUsers, setListUsers] = useState([]);
     const { search_user } = useSelector(state => state.user);
-
+    const [intervalRequest, setIntervalRequest] = useState(null);
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         const loadData = async () => {
             const users = await userService.getListUsers();
             if (users.errors)
-                console.log(users.errors[0]);
+                return console.log(users.errors[0]);
 
             setAllUsers(users)
             setListUsers(users)
@@ -56,7 +58,28 @@ const ListUsers = ({ navigation }) => {
             return userMatchesSearch
         })
         setListUsers(filterUsersBySearch);
-    }, [search_user])
+    }, [search_user, allUsers])
+
+    // make requests API in some interval
+    useEffect(() => {
+        if (isFocused)
+            return setIntervalRequest(setInterval(async () => {
+                const users = await userService.getListUsers();
+                const changeUserList = JSON.stringify(users) !== JSON.stringify(allUsers);
+
+                if (users.errors)
+                    return console.log(users.errors[0]);
+
+                if(changeUserList){
+                    setAllUsers(users);
+                    dispatch(getFriends())
+                }
+                    
+            }, 5000))
+
+        clearInterval(intervalRequest)
+    }, [isFocused])
+
 
     return (
         <ContainerUsers
@@ -88,6 +111,7 @@ const ListUsers = ({ navigation }) => {
                             <HandleAddIcon
                                 user={user}
                                 navigation={navigation}
+                                dispatch={dispatch}
                             />
                         </ContainerAddIcon>
                     </>
