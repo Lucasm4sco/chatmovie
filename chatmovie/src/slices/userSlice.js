@@ -153,14 +153,12 @@ const userSlice = createSlice({
                 state.friend_requests_loading = {}
             })
             .addCase(acceptFriendRequest.fulfilled, (state, { payload }) => {
-                console.log(payload)
                 state.friends = payload.friends;
                 state.friend_requests = payload.friend_requests;
                 state.friend_requests_sent = payload.friend_requests_sent;
                 state.friend_requests_loading = {}
             })
             .addCase(rejectFriendRequest.fulfilled, (state, { payload }) => {
-                console.log(payload)
                 state.friends = payload.friends;
                 state.friend_requests = payload.friend_requests;
                 state.friend_requests_sent = payload.friend_requests_sent;

@@ -59,7 +59,7 @@ export const ContainerRow = styled.View`
 export const Button = styled.TouchableOpacity`
     margin: 0 20px;
     flex-direction: row;
-    background-color: ${props => props.bgColor}
+    background-color: ${props => props.bgColor};
     padding: 10px 30px;
     border-radius: 6px
     top: -5px;
@@ -69,7 +69,7 @@ export const Button = styled.TouchableOpacity`
 export const TextButton = styled.Text`
     font-weight: bold;
     color: white;
-    margin-left: 5px
+    margin: 0 5px
 `
 
 export const BioContainer = styled.Text`
