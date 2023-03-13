@@ -52,7 +52,7 @@ const sendFriendRequest = async (id) => {
     return friendsData
 }
 
-const acceptFriendRequest = async(id) => {
+const acceptFriendRequest = async (id) => {
     const friendsData = await Requests.makePOST('users', '/friends/accept', {
         id_user_request: id
     }, {
@@ -70,6 +70,14 @@ const rejectFriendRequest = async (id) => {
     return friendsData
 }
 
+const handleFavoriteMovies = async (id, action) => {
+    const data = { id_movie: id, action }
+    const movies = await Requests.makePATCH('users', '/movies', data, {
+        headers: await Requests.getHeaderWithAuthorization()
+    })
+    return movies
+}
+
 const userService = {
     getCurrentProfile,
     updateUserProfile,
@@ -79,7 +87,8 @@ const userService = {
     getUserProfile,
     sendFriendRequest,
     acceptFriendRequest,
-    rejectFriendRequest
+    rejectFriendRequest,
+    handleFavoriteMovies
 };
 
 export default userService;

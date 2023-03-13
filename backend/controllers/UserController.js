@@ -193,6 +193,7 @@ const getFavoriteMovies = async (req, res) => {
 const updateFavoriteMovies = async (req, res) => {
     try {
         const { id_movie, action } = req.body;
+        const user = await User.findById(req.user._id);
 
         if (action === 'add') {
             const dataMovie = await makeRequestTMDB('/movie/' + id_movie);
@@ -201,28 +202,23 @@ const updateFavoriteMovies = async (req, res) => {
             if (isInvalidId)
                 return res.status(422).json({ errors: ['ID do filme inválido.'] });
 
-            const user = await User.findById(req.user._id);
-
             if (user.favorite_movies.includes(id_movie))
                 return res.status(422).json({ errors: ['Filme já adicionado aos favoritos.'] });
 
             user.favorite_movies.push(id_movie);
             await user.save();
-            return res.status(200).json({ favorite_movies: user.favorite_movies });
+            return res.status(200).json({ movies: user.favorite_movies });
         }
 
-        if (action === 'delete') {
-            const favorite_movies = req.user.favorite_movies;
+        if (action === 'remove') {
+            const favorite_movies = user.favorite_movies;
 
             if (!favorite_movies.includes(id_movie))
                 return res.status(404).json({ errors: ['O ID do filme não foi encontrado na lista de favoritos.'] });
 
-            const updatedUser = await User.findByIdAndUpdate(
-                req.user._id,
-                { $pull: { favorite_movies: id_movie } },
-                { new: true }
-            );
-            return res.status(200).json({ favorite_movies: updatedUser.favorite_movies });
+            user.favorite_movies = user.favorite_movies.filter(id => id !== id_movie);
+            await user.save();
+            return res.status(200).json({ movies: user.favorite_movies });
         }
 
         return res.status(422).json({ errors: ['A ação não foi definida corretamente'] });

@@ -1,8 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { StatusBar, TouchableOpacity } from "react-native"
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL_IMAGE } from "../../utils/requestsAPI";
 import { AntDesign } from '@expo/vector-icons';
+import { addFavoriteMovie, removeFavoriteMovie } from "../../slices/userSlice";
 import movieService from "../../services/movieService";
 
 import { Container, ButtonFavorite, ImageMovie, TitleMovie, ContainerGenres, Genre, SubTitle, TextYearMovie, DescriptionMovie, ViewLimitContent, TextShowMore } from "./styles";
@@ -11,17 +12,17 @@ import LoadingComponent from "../../components/LoadingComponent";
 import HeaderGoBack from "../../components/HeaderGoBack";
 import ListMovieRow from "../../components/ListMovieRow";
 
+
 const MovieDetailsScreen = ({ navigation, route }) => {
     const { id } = route.params;
-    const { user } = useSelector(state => state.user);
+    const { user, favorite_movies } = useSelector(state => state.user);
     const [loading, setLoading] = useState(false);
     const [movieDetails, setMovieDetails] = useState(null);
     const [recommendedMovies, setRecommendedMovies] = useState([]);
     const [urlImage, setUrlImage] = useState(null);
     const [showMore, setShowMore] = useState(false);
     const [numberOfLines, setNumberOfLines] = useState(3);
-
-    const [favorite_movies, setFav] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const loadDataMovie = async () => {
@@ -61,17 +62,22 @@ const MovieDetailsScreen = ({ navigation, route }) => {
 
     const handleShowMoreButton = () => numberOfLines === 3 ? setNumberOfLines(0) : setNumberOfLines(3)
 
+    const handleFavoriteMovies = (id) => {
+        const isAlreadyFavorite = favorite_movies.includes(id);
+
+        if (isAlreadyFavorite)
+            return dispatch(removeFavoriteMovie(id));
+
+        dispatch(addFavoriteMovie(id));
+    }
+
     return (
         <>
             <HeaderGoBack navigation={navigation} >
                 {user && (
                     <ButtonFavorite
                         activeOpacity={0.6}
-                        onPress={() => {
-                            favorite_movies.includes(movieDetails.id)
-                                ? setFav(favorite_movies.filter(id => id !== movieDetails.id)) :
-                                setFav([...favorite_movies, movieDetails.id])
-                        }}
+                        onPress={() => handleFavoriteMovies(movieDetails?.id)}
                     >
                         {favorite_movies.includes(movieDetails?.id) ? (
                             <AntDesign name="heart" size={24} color="white" />

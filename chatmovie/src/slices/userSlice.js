@@ -14,6 +14,7 @@ const initialState = {
     friend_requests_sent: [],
     friend_requests_loading: {},
     favorite_movies: [],
+    loading_favorite_movies: false,
     search_user: ''
 }
 
@@ -93,6 +94,30 @@ export const rejectFriendRequest = createAsyncThunk(
     }
 )
 
+export const addFavoriteMovie = createAsyncThunk(
+    'user/addfavoritemovie',
+    async (id, thunkAPI) => {
+        const movies = await userService.handleFavoriteMovies(id, 'add');
+
+        if (movies.errors)
+            return thunkAPI.rejectWithValue(userData.errors[0]);
+
+        return movies
+    }
+)
+
+export const removeFavoriteMovie = createAsyncThunk(
+    'user/removefavoritemovie',
+    async (id, thunkAPI) => {
+        const movies = await userService.handleFavoriteMovies(id, 'remove');
+
+        if (movies.errors)
+            return thunkAPI.rejectWithValue(userData.errors[0]);
+
+        return movies
+    }
+)
+
 const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -163,6 +188,26 @@ const userSlice = createSlice({
                 state.friend_requests = payload.friend_requests;
                 state.friend_requests_sent = payload.friend_requests_sent;
                 state.friend_requests_loading = {}
+            })
+            .addCase(addFavoriteMovie.fulfilled, (state, { payload }) => {
+                state.favorite_movies = payload.movies;
+                state.loading_favorite_movies = false;
+            })
+            .addCase(addFavoriteMovie.pending, (state) => {
+                state.loading_favorite_movies = true
+            })
+            .addCase(addFavoriteMovie.rejected, (state) => {
+                state.loading_favorite_movies = false
+            })
+            .addCase(removeFavoriteMovie.fulfilled, (state, { payload }) => {
+                state.favorite_movies = payload.movies;
+                state.loading_favorite_movies = false;
+            })
+            .addCase(removeFavoriteMovie.pending, (state) => {
+                state.loading_favorite_movies = true
+            })
+            .addCase(removeFavoriteMovie.rejected, (state) => {
+                state.loading_favorite_movies = false
             })
     }
 })

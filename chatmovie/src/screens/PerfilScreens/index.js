@@ -4,6 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getCurrentProfile, resetUpdate } from "../../slices/userSlice";
 import { Container, CoverImage, LimitContainer, PerfilPicture, CenterContent, PerfilName, UserName, BioContainer, ContainerRow, Button, TextButton, TitleSection, WithoutMovies } from "./styles";
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import movieService from "../../services/movieService";
 import Requests from "../../utils/requestsAPI";
 
 import iconeUser from '../../assets/icons/user.png';
@@ -13,12 +14,26 @@ import LoadingComponent from '../../components/LoadingComponent';
 const PerfilScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const { user, loading, favorite_movies } = useSelector(state => state.user);
+    const [favoriteMovies, setFavoriteMovies] = useState([]);
     const [coverImage, setCoverImage] = useState('');
     const [profilePicture, setProfilePicture] = useState(iconeUser);
 
     useEffect(() => {
         dispatch(getCurrentProfile());
     }, [dispatch])
+    
+    useEffect(() => {
+        const loadFavoriteMovies = async () => {
+            const allMovies = []
+            for (let id_movie of favorite_movies) {
+                const movieDetails = await movieService.getMovieDetails(id_movie);
+                allMovies.push(movieDetails)
+            }
+            setFavoriteMovies(allMovies)
+        };
+
+        loadFavoriteMovies()
+    }, [favorite_movies]);
 
     useEffect(() => {
         if (!user || !Object.keys(user).length)
@@ -83,7 +98,7 @@ const PerfilScreen = ({ navigation }) => {
                 {favorite_movies.length ? (
                     <ListMovieRow
                         title='Filmes favoritos'
-                        items={favorite_movies}
+                        items={favoriteMovies}
                         isPoster
                     />
                 ) : (
