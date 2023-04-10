@@ -3,11 +3,10 @@ import { generateToken } from "../utils/token.js";
 import { makeRequestTMDB } from "../utils/request.js";
 import { Types } from "mongoose";
 import User from "../models/UserModel.js";
-import Uuid from "../models/UuidModel.js";
 
 const turnIntoHash = data => bcrypt.hashSync(data, bcrypt.genSaltSync())
 
-const isValidObjectId = id => Types.ObjectId.isValid(id) ? (String)(new Types.ObjectId(id)) === id : false
+export const isValidObjectId = id => Types.ObjectId.isValid(id) ? (String)(new Types.ObjectId(id)) === id : false
 
 const Register = async (req, res) => {
     const { name, user_name, email, password } = req.body;
@@ -34,8 +33,6 @@ const Register = async (req, res) => {
             email,
             password: turnIntoHash(password)
         });
-
-        await Uuid.create({ _id_user: newUser._id })
 
         const userData = {
             _id: newUser._id,
