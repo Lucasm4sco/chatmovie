@@ -4,6 +4,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch } from "react-redux";
 import { removeDataStorage } from "../../utils/storage";
 import { reset } from "../../slices/authSlice";
+import { resetDataUsers } from "../../slices/userSlice";
 
 const HeaderTabNavigator = ({ navigation, route, auth }) => {
     const dispatch = useDispatch()
@@ -11,6 +12,7 @@ const HeaderTabNavigator = ({ navigation, route, auth }) => {
     const logout = () => {
         removeDataStorage();
         dispatch(reset());
+        dispatch(resetDataUsers());
     }
 
     return (

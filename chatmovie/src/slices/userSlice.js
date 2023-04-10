@@ -132,6 +132,10 @@ const userSlice = createSlice({
         },
         setSearchUser: (state, { payload }) => {
             state.search_user = payload
+        },
+        resetDataUsers: (state) => {
+            for (const key in state)
+                state[key] = initialState[key]
         }
     },
     extraReducers: (builder) => {
@@ -212,5 +216,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { resetUpdate, setSearchUser } = userSlice.actions;
+export const { resetUpdate, setSearchUser, resetDataUsers } = userSlice.actions;
 export default userSlice.reducer;
