@@ -1,5 +1,5 @@
 import { StatusBar } from "react-native";
-import { ColorRed, HeaderContainer, Text, ButtonSearch } from "./styles";
+import { ColorRed, HeaderContainer, Text, Button } from "./styles";
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch } from "react-redux";
 import { removeDataStorage } from "../../utils/storage";
@@ -18,20 +18,28 @@ const HeaderTabNavigator = ({ navigation, route, auth }) => {
             <StatusBar />
             <Text>C<ColorRed>M</ColorRed></Text>
             {route.name === 'Home' && (
-                <ButtonSearch
+                <Button
                     activeOpacity={0.6}
                     onPress={() => navigation.navigate('Search')}
                 >
                     <Ionicons name="search" size={28} color="white" />
-                </ButtonSearch>
+                </Button>
             )}
             {auth && route.name === 'Authenticate' && (
-                <ButtonSearch
+                <Button
                     activeOpacity={0.6}
                     onPress={logout}
                 >
-                    <MaterialIcons name="login" size={24} color="white" />
-                </ButtonSearch>
+                    <MaterialIcons name="login" size={28} color="white" />
+                </Button>
+            )}
+            {auth && route.name === 'Messages' && (
+                <Button
+                    activeOpacity={0.6}
+        
+                >
+                    <MaterialIcons name="add" size={32} color="white" />
+                </Button>
             )}
         </HeaderContainer>
     )

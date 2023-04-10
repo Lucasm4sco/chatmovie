@@ -11,7 +11,7 @@ import Requests from "../../utils/requestsAPI";
 import iconeUser from '../../assets/icons/user.png';
 import movieService from '../../services/movieService';
 
-const HandleStateUser = ({ user }) => {
+const HandleStateUser = ({ user, navigation }) => {
     const { friends, friend_requests_sent, friend_requests } = useSelector(state => state.user);
     const isFriend = friends?.findIndex(id => id.toString() === user._id.toString()) !== -1;
     const friendRequestReceived = friend_requests?.findIndex(id => id.toString() === user._id.toString()) !== -1;
@@ -20,7 +20,10 @@ const HandleStateUser = ({ user }) => {
 
     if (isFriend)
         return (
-            <Button bgColor='red'>
+            <Button
+                bgColor='red'
+                onPress={() => navigation.navigate('Message', { user })}
+            >
                 <>
                     <TextButton>Mensagem</TextButton>
                     <MaterialCommunityIcons name="email-outline" size={24} color="white" />
@@ -123,7 +126,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                     <PerfilName>{user.name}</PerfilName>
                     <UserName>{'@' + user.user_name}</UserName>
                     <ContainerRow>
-                        <HandleStateUser user={user} />
+                        <HandleStateUser user={user} navigation={navigation} />
                     </ContainerRow>
                     <BioContainer>
                         {user.bio ? user.bio : 'Nenhuma bio definida ainda.'}
@@ -145,7 +148,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                         ) : (
                             <>
                                 <TitleSection>Filmes favoritos:</TitleSection>
-                                <WithoutMovies>Nenhum filme favoritado ainda.</WithoutMovies>
+                                <WithoutMovies>Nenhum filme favoritado.</WithoutMovies>
                             </>
                         )
                     )}

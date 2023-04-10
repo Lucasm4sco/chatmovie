@@ -21,7 +21,7 @@ export const ColorRed = styled.Text`
     color: #c30f0e;
 `
 
-export const ButtonSearch = styled.TouchableOpacity`
+export const Button = styled.TouchableOpacity`
     height: 40px;
     width: 40px;
     border-radius: 20px;

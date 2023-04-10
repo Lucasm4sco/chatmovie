@@ -16,7 +16,7 @@ const ContainerForm = ({ children, error }) => {
     return (
         <KeyboardAvoidingView
             behavior="height"
-            keyboardVerticalOffset={185}
+            keyboardVerticalOffset={150}
             contentContainerStyle={{ flex: 1 }}
         >
             <Container

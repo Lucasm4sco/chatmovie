@@ -7,7 +7,7 @@ const BASE_URL = 'http://192.168.2.199:5000';
 const BASE_URL_TMBD = "https://api.themoviedb.org/3";
 const REQUESTS_ENDPOINTS = {
     users: '/api/users',
-    movies: '/api/movies'
+    message: '/api/message'
 }
 
 export const makeRequestTMDB = async (path, filter = '') => {
@@ -59,6 +59,14 @@ const getHeaderWithAuthorization = async () => {
     const bearer_token = `Bearer ${await getToken()}`
     const headers = { Authorization: bearer_token };
     return headers
+}
+
+export const getSocket = (type, filter = '', protocols = null, config = {}) => {
+    if(filter)
+        filter = '?' + filter
+
+    const urlSocket = BASE_URL.replace('http', 'ws') + REQUESTS_ENDPOINTS[type] + filter;
+    return new WebSocket(urlSocket, protocols, config);
 }
 
 const Requests = {
