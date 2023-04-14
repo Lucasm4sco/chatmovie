@@ -73,7 +73,7 @@ const getMessage = async (userId, userId2) => {
     }).select('messages updatedAt members key');
 
     if (!infoMessage)
-        return []
+        return { members: [userId.toString(), userId2.toString()], messages: [] }
 
     const lastMessageEncrypted = infoMessage.messages.pop();
     const key = cripto.decryptKey(infoMessage.key);
