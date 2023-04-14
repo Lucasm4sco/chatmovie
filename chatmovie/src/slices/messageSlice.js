@@ -44,13 +44,13 @@ const messageSlice = createSlice({
 
             const existsMessage = state.lastMessages.findIndex(message => JSON.stringify(message.members) === membersMessage);
 
-            if (existsMessage !== -1) 
+            if (existsMessage !== -1)
                 state.lastMessages.splice(existsMessage, 1);
 
-            state.lastMessages.unshift({ 
-                key: payload.key, 
-                messages: [payload.message], 
-                members: payload.members 
+            state.lastMessages.unshift({
+                key: payload.key,
+                messages: [payload.message],
+                members: payload.members
             });
         },
         setLoading: (state, { payload }) => {
@@ -58,6 +58,13 @@ const messageSlice = createSlice({
         },
         resetMessages: (state) => {
             state.infoMessage = null;
+        },
+        resetAllMessages: (state) => {
+            if (state.messageSocket && state.messageSocket.readyState)
+                state.messageSocket.close()
+
+            for (const key in state)
+                state[key] = initialState[key]
         }
     },
     extraReducers: (builder) => {
