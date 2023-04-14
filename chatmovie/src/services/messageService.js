@@ -29,8 +29,11 @@ const eventMessage = (socket, dispatch, messageActions) => {
         if (objMessage.action === 'get-message')
             return dispatch(messageActions.setMessages(objMessage.message));
 
-        if (objMessage.action === 'send-message' || objMessage.action === 'receive-message')
-            return dispatch(messageActions.updateMessages(objMessage.message))
+        if(objMessage.action === 'send-message')
+            return dispatch(messageActions.updateSentMessage(objMessage.message));
+
+        if (objMessage.action === 'receive-message')
+            return dispatch(messageActions.updateReceivedMessage(objMessage.message));
     }
 }
 

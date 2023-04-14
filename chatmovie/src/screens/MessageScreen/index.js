@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { ActivityIndicator as Spinner } from "react-native";
-import { ContainerBody, ContainerForm, ContainerScreen, HeaderMessage, Input, ImageProfile, UserName, ButtonClose, ButtonSendMessage, TextWithoutMessage, TextMessage, MessageComponent, TimeMessage, ContainerMessages } from "./styles";
+import { ContainerBody, ContainerForm, ContainerScreen, HeaderMessage, Input, ImageProfile, UserName, ButtonClose, ButtonSendMessage, TextWithoutMessage, TextMessage, MessageComponent, TimeMessage } from "./styles";
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { connectWebSocket, messageActions } from "../../slices/messageSlice";
 import { decryptText } from "../../utils/cripto";
+import { Feather } from "@expo/vector-icons";
 import Requests from '../../utils/requestsAPI.js';
 import messageService from "../../services/messageService";
 
@@ -18,10 +19,31 @@ const RenderMessages = ({ messages, userMessage }) => {
         return <TextWithoutMessage> Seja o primeiro a enviar uma mensagem. </TextWithoutMessage>
 
     return messages.messages.map(message => {
+        const isSentMessage = typeof message !== 'string' && message.content
+
+        if (isSentMessage) {
+            const dateMessage = message.date ? new Date(message.date) : null
+            const timeMessage = dateMessage 
+                ? dateMessage.getHours() + ':' + dateMessage.getMinutes().toString().padStart(2, '0') 
+                : null
+
+            return (
+                <MessageComponent key={message.content + Math.random()} isMyMessage={true}>
+                    <TextMessage>{message.content}</TextMessage>
+                    <TimeMessage>
+                        {timeMessage || <Feather name="clock" size={13} color="#565555" />}
+                    </TimeMessage>
+                </MessageComponent>
+            )
+        }
+
+
         const infoMessage = JSON.parse(decryptText(message, messages.key));
         const isMyMessage = userMessage._id.toString() !== infoMessage.id_user;
-        const dateMessage = new Date(infoMessage.date);
-        const timeMessage = dateMessage.getHours() + ':' + dateMessage.getMinutes().toString().padStart(2, '0');
+        const dateMessage = infoMessage.date? new Date(infoMessage.date) : null;
+        const timeMessage = dateMessage 
+                ? dateMessage.getHours() + ':' + dateMessage.getMinutes().toString().padStart(2, '0') 
+                : null
 
         return (
             <MessageComponent key={message} isMyMessage={isMyMessage}>
@@ -64,9 +86,17 @@ const MessageScreen = ({ route, navigation }) => {
     }, [dispatch, messageSocket, messageSocket?.readyState]);
 
     const sendMessage = () => {
-        if (messageSocket.readyState === messageSocket.OPEN)
-            messageService.actionSendMessage(message, user._id, messageSocket);
+        const emptyMessage = !message.trim()
+        const connectionClosed = !(messageSocket.readyState === messageSocket.OPEN)
 
+        if (emptyMessage || connectionClosed)
+            return
+
+        dispatch(messageActions.addMessage({
+            id_user: user._id.toString(),
+            content: message
+        }))
+        messageService.actionSendMessage(message, user._id, messageSocket);
         setMessage('');
     }
 
@@ -109,10 +139,10 @@ const MessageScreen = ({ route, navigation }) => {
             <ContainerForm>
                 <Input
                     autoCapitalize="sentences"
+                    cursorColor='white'
                     value={message || ''}
                     onChangeText={(text) => setMessage(text)}
                     onSubmitEditing={sendMessage}
-                    
                 />
                 <ButtonSendMessage
                     onPress={sendMessage}

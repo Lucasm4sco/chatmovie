@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import messageService from "../services/messageService";
+import { decryptText } from "../utils/cripto";
 
 const initialState = {
     messageSocket: null,
@@ -33,14 +34,54 @@ const messageSlice = createSlice({
             state.infoMessage = payload;
             state.loading = false;
         },
-        updateMessages: (state, { payload }) => {
+        addMessage: (state, { payload }) => {
+            state.infoMessage.messages.unshift(payload)
+        },
+        updateSentMessage: (state, { payload }) => {
             const membersMessage = JSON.stringify(payload.members);
             const isSameInfoMessage = state.infoMessage
                 ? JSON.stringify(state.infoMessage.members) === membersMessage
                 : false
 
+            if (isSameInfoMessage && payload.key && !state.infoMessage.key)
+                state.infoMessage.key = payload.key
+
+            const decryptedMessage = JSON.parse(decryptText(payload.message, payload.key));
+            const indexOfMessage = state.infoMessage.messages.findIndex(
+                message => typeof message !== 'string' && message.content === decryptedMessage.content
+            )
+
+            if (indexOfMessage !== -1 && isSameInfoMessage) {
+                state.infoMessage.messages[indexOfMessage].date = decryptedMessage.date
+                state.infoMessage.messages[indexOfMessage].visualized = decryptedMessage.visualized
+            }
+
+            if (indexOfMessage === -1 && isSameInfoMessage)
+                state.infoMessage.messages.unshift(payload.message)
+
+            const existsMessage = state.lastMessages.findIndex(message => JSON.stringify(message.members) === membersMessage);
+
+            if (existsMessage !== -1)
+                state.lastMessages.splice(existsMessage, 1);
+
+            state.lastMessages.unshift({
+                key: payload.key,
+                messages: [payload.message],
+                members: payload.members
+            });
+
+        },
+        updateReceivedMessage: (state, { payload }) => {
+            const membersMessage = JSON.stringify(payload.members);
+            const isSameInfoMessage = state.infoMessage
+                ? JSON.stringify(state.infoMessage.members) === membersMessage
+                : false
+
+            if (isSameInfoMessage && payload.key && !state.infoMessage.key)
+                state.infoMessage.key = payload.key
+
             if (isSameInfoMessage)
-                state.infoMessage.messages.unshift(payload.message);
+                state.infoMessage.messages.unshift(payload.message)
 
             const existsMessage = state.lastMessages.findIndex(message => JSON.stringify(message.members) === membersMessage);
 

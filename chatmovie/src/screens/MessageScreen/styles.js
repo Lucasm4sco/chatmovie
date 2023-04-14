@@ -88,13 +88,13 @@ export const ContainerForm = styled.View`
     height: 80px;
     flex-shrink: 0;
     flex-direction: row;
-    padding: 5px 8px;
+    padding: 5px 8px 0 15px;
 `
 
 export const Input = styled.TextInput`
     width: 90%;
     height: 48px;
-    background-color: #414141;
+    background-color: #302D2D;
     border-radius: 10px;
     border: 1px solid black;
     padding: 0 12px;
