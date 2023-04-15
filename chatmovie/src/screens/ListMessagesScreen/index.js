@@ -65,7 +65,7 @@ const ListMessagesScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (dispatch && !messageSocket)
+        if (dispatch && !messageSocket && user)
             dispatch(connectWebSocket());
 
         if (messageSocket && !messageSocket.onmessage)
