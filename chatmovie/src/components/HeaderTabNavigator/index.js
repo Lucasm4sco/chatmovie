@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { StatusBar, Modal } from "react-native";
 import { ColorRed, HeaderContainer, Text, Button, ViewModal, TextModal, ContainerButtons, ButtonModal, TextButton } from "./styles";
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -12,16 +12,13 @@ const HeaderTabNavigator = ({ navigation, route, auth }) => {
     const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch()
 
-    const logout = async () => {
-        await Promise.all([
-            Promise.resolve(removeDataStorage()),
-            dispatch(reset()),
-            dispatch(resetDataUsers()),
-            dispatch(messageActions.resetAllMessages()),
-        ]);
-
+    const logout = useCallback(() => {
+        dispatch(messageActions.resetAllMessages())  
+        removeDataStorage()
+        dispatch(reset())
+        dispatch(resetDataUsers())
         setShowModal(false);
-    }
+    }, [])
 
     return (
         <HeaderContainer>

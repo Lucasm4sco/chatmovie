@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { ActivityIndicator as Spinner } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
-import { ButtonGoBack } from "./stylesEditPerfil";
+import { Header, ButtonGoBack } from "./stylesEditPerfil";
 import { Container, LimitContainer, CoverImage, CenterContent, PerfilPicture, UserName, PerfilName, BioContainer, ContainerRow, Button, TextButton, TitleSection, WithoutMovies } from "./styles";
 import { AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Header } from "./stylesEditPerfil";
+import { sendFriendRequest, rejectFriendRequest, acceptFriendRequest } from '../../slices/userSlice';
 import ListMovieRow from '../../components/ListMovieRow';
 import userService from '../../services/userService';
 import Requests from "../../utils/requestsAPI";
@@ -17,6 +17,16 @@ const HandleStateUser = ({ user, navigation }) => {
     const friendRequestReceived = friend_requests?.findIndex(id => id.toString() === user._id.toString()) !== -1;
     const requestAlreadySentToUser = friend_requests_sent?.findIndex(id => id.toString() === user._id.toString()) !== -1;
     const dispatch = useDispatch();
+
+    const handleRequests = (type) => {
+        const requests = {
+            'accept': () => dispatch(acceptFriendRequest(user._id.toString())),
+            'reject': () => dispatch(rejectFriendRequest(user._id.toString())),
+            'send': () => dispatch(sendFriendRequest(user._id.toString()))
+        }
+
+        requests[type]()
+    }
 
     if (isFriend)
         return (
@@ -34,19 +44,17 @@ const HandleStateUser = ({ user, navigation }) => {
     if (friendRequestReceived)
         return (
             <>
-                <Button bgColor='#252525'>
-                    <>
-                        <TextButton>
-                            Rejeitar
-                        </TextButton>
-                    </>
+                <Button bgColor='#252525' onPress={() => handleRequests('reject')}>
+
+                    <TextButton>
+                        Rejeitar
+                    </TextButton>
+
                 </Button>
-                <Button bgColor='red'>
-                    <>
-                        <TextButton>
-                            Aceitar
-                        </TextButton>
-                    </>
+                <Button bgColor='red' onPress={() => handleRequests('accept')}>
+                    <TextButton>
+                        Aceitar
+                    </TextButton>
                 </Button>
             </>
         )
@@ -62,7 +70,7 @@ const HandleStateUser = ({ user, navigation }) => {
         )
 
     return (
-        <Button bgColor='#133463'>
+        <Button bgColor='#133463' onPress={() => handleRequests('send')}>
             <>
                 <TextButton>Enviar solicitação</TextButton>
                 <AntDesign name="adduser" size={24} color="white" />
@@ -142,7 +150,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                         favoriteMovies.length && !favoriteMovies.errors ? (
                             <ListMovieRow
                                 title='Filmes favoritos'
-                                items={favoriteMovies}
+                                items={favoriteMovies.reverse()}
                                 isPoster
                             />
                         ) : (

@@ -97,10 +97,13 @@ export const rejectFriendRequest = createAsyncThunk(
 export const addFavoriteMovie = createAsyncThunk(
     'user/addfavoritemovie',
     async (id, thunkAPI) => {
+        thunkAPI.dispatch(userSlice.actions.addMovie(id))
         const movies = await userService.handleFavoriteMovies(id, 'add');
 
-        if (movies.errors)
-            return thunkAPI.rejectWithValue(userData.errors[0]);
+        if (movies.errors){
+            thunkAPI.dispatch(userSlice.actions.removeMovie(id));
+            return thunkAPI.rejectWithValue(movies.errors[0]);
+        }
 
         return movies
     }
@@ -109,10 +112,13 @@ export const addFavoriteMovie = createAsyncThunk(
 export const removeFavoriteMovie = createAsyncThunk(
     'user/removefavoritemovie',
     async (id, thunkAPI) => {
+        await thunkAPI.dispatch(userSlice.actions.removeMovie(id))
         const movies = await userService.handleFavoriteMovies(id, 'remove');
 
-        if (movies.errors)
-            return thunkAPI.rejectWithValue(userData.errors[0]);
+        if (movies.errors){
+            await thunkAPI.dispatch(userSlice.actions.addMovie(id));
+            return thunkAPI.rejectWithValue(movies.errors[0]);
+        }
 
         return movies
     }
@@ -136,6 +142,12 @@ const userSlice = createSlice({
         resetDataUsers: (state) => {
             for (const key in state)
                 state[key] = initialState[key]
+        },
+        addMovie: (state, { payload }) => {
+            state.favorite_movies.push(payload);
+        },
+        removeMovie: (state, { payload }) => {
+            state.favorite_movies = state.favorite_movies.filter(id => id != payload)
         }
     },
     extraReducers: (builder) => {

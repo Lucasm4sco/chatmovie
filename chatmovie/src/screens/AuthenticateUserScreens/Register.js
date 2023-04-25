@@ -93,6 +93,7 @@ const Register = ({ navigation }) => {
                 selectionColor='red'
                 value={confirmPassword || ''}
                 onChangeText={text => setConfirmPassword(text)}
+                onSubmitEditing={handleSubmit}
             />
             <Button 
                 activeOpacity={0.6}

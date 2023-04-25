@@ -65,7 +65,7 @@ const ListFriends = ({ navigation }) => {
                 alignItems: 'center'
             }}
         >
-            {friends.length ? (
+            {friends?.length ? (
                 listFriends.map(user => (
                     <RenderCard key={user?._id?.toString()} user={user} navigation={navigation} />
                 ))

@@ -86,7 +86,7 @@ const PerfilScreen = ({ navigation }) => {
                     </Button>
                     <Button
                         bgColor='#133463'
-                        onPress={() => navigation.navigate('list-friends')}
+                        onPress={() => navigation.navigate('Add', { screen: 'list-friends'})}
                     >
                         <Feather name="users" size={20} color="white" />
                         <TextButton>Amigos</TextButton>
@@ -98,7 +98,7 @@ const PerfilScreen = ({ navigation }) => {
                 {favorite_movies.length ? (
                     <ListMovieRow
                         title='Filmes favoritos'
-                        items={favoriteMovies}
+                        items={favoriteMovies.reverse()}
                         isPoster
                     />
                 ) : (

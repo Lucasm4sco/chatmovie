@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TouchableOpacity, ActivityIndicator as Spinner } from "react-native";
 import { Label, Input, Button, TitleButton, Paragraph, ContainerLink, TextLink, ContainerError, ErrorMessage } from "./styles"
@@ -16,7 +16,7 @@ const Login = ({ navigation }) => {
             return
 
         const userData = { login: loginValue, password };
-        dispatch(LoginAction(userData));
+        dispatch(LoginAction(userData))
     }
 
     return (
@@ -48,6 +48,7 @@ const Login = ({ navigation }) => {
                 selectionColor='red'
                 value={password || ''}
                 onChangeText={text => setPassword(text)}
+                onSubmitEditing={handleSubmit}
             />
             <Button
                 activeOpacity={0.6}
