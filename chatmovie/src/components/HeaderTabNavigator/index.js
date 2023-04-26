@@ -43,7 +43,7 @@ const HeaderTabNavigator = ({ navigation, route, auth }) => {
             {auth && route.name === 'Messages' && (
                 <Button
                     activeOpacity={0.6}
-
+                    onPress={() => navigation.navigate('FriendsMessage')}
                 >
                     <MaterialIcons name="add" size={32} color="white" />
                 </Button>

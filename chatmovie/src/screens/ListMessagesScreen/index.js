@@ -105,7 +105,9 @@ const ListMessagesScreen = ({ navigation }) => {
                         <TextWithoutMessage color='#aaa'>
                             Você ainda não possui mensagens
                         </TextWithoutMessage>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('FriendsMessage')}
+                        >
                             <TextWithoutMessage color='red'>Enviar primeira mensagem</TextWithoutMessage>
                         </TouchableOpacity>
                     </CenterContent>

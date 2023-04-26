@@ -62,17 +62,7 @@ export const TextWithoutMessage = styled.Text`
     margin: 2px 20px;
 `
 
-export const WithoutMessage = styled.Text`
-    text-align-vertical: center;
-    font-size: 16px;
-    color: #AAA;
-`
-
 export const TextColorRed = styled.Text`
     font-size: 16px;
     color: red;
-`
-
-export const ButtonSendFirstMessage = styled.TouchableOpacity`
-
 `

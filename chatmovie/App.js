@@ -20,6 +20,7 @@ import EditProfileScreen from './src/screens/PerfilScreens/EditPerfilScreen';
 import UsersScreen from './src/screens/UsersScreen';
 import UserProfileScreen from './src/screens/PerfilScreens/UserProfileScreen';
 import ListMessagesScreen from './src/screens/ListMessagesScreen';
+import ListFriendsMessageScreen from './src/screens/ListFriendsMessageScreen';
 import MessageScreen from './src/screens/MessageScreen';
 
 import TabNavigatorComponent from './src/components/TabNavigatorComponent';
@@ -80,6 +81,7 @@ const App = () => {
         <Stack.Screen name='EditProfile' component={EditProfileScreen} />
         <Stack.Screen name='UserProfile' component={UserProfileScreen} />
         <Stack.Screen name='Message' component={MessageScreen} />
+        <Stack.Screen name='FriendsMessage' component={ListFriendsMessageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
