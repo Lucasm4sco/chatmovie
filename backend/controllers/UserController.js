@@ -155,7 +155,7 @@ const getUserById = async (req, res) => {
             return res.status(400).json({ errors: ['Não foi possível completar a requisição.'] });
 
         const userProfile = await User.findById(id)
-            .select('email user_name name profile_picture cover_image bio');
+            .select('user_name name profile_picture cover_image bio');
         return res.status(200).json(userProfile);
     } catch (error) {
         console.log(error.message);
