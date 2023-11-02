@@ -17,5 +17,5 @@ As principais tecnologias usadas para o desenvolvimento desse aplicativo foram:
 
 Para executar em sua máquina o projeto, verifique as seguintes configurações do ambiente:
 
-- [Configura o backend da aplicação](./backend/README.md#como-executar)
-- [Configure o frontend da aplicação](./chatmovie/README.md#como-executar)
+- [Configurar o backend da aplicação](./backend/README.md#como-executar)
+- [Configurar o frontend da aplicação](./chatmovie/README.md#como-executar)
