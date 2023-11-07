@@ -1,5 +1,7 @@
 # ChatMovie
 
+![banner do projeto, design com a temática de filmes, mostra a tela inicial do aplicativo e a tela de mensagens](./banner.png)
+
 ## Sobre o projeto
 
 O projeto pessoal ChatMovie é um aplicativo que permite que os usuários pesquisem e visualizem informações sobre filmes. Além disso, o aplicativo oferece recursos adicionais para usuários cadastrados, como personalizar seus perfis, adicionar amigos, favoritar filmes e criar um chat em tempo real com outros usuários.
